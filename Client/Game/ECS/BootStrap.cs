@@ -103,7 +103,8 @@ namespace ECS
 
         private void Update()
         {
-            cornerRect = cameraView.rect;
+            if (cameraView)
+                cornerRect = cameraView.rect;
         }
     }
 }
