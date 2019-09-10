@@ -1,4 +1,5 @@
 ﻿using System;
+using Framework;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Rendering;
