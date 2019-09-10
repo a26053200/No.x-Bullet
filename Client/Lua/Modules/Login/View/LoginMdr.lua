@@ -26,8 +26,8 @@ function LoginMdr:OnInit()
     self.password = SystemUtils.GetPlayerPrefsString(PASSWORD)
     self.gameObject:GetInputField("V/H1/InputField").text = self.username
     self.gameObject:GetInputField("V/H2/InputField").text = self.password
-    local img = self.gameObject:GetImage("Image")
-    img.sprite = Res.LoadSprite("Atlas/HeadIcon/1.jpg")
+    --local img = self.gameObject:GetImage("Image")
+    --img.sprite = Res.LoadSprite("Atlas/HeadIcon/1.jpg")
 end
 
 function LoginMdr:fetchInput()
