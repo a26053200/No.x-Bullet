@@ -2,6 +2,7 @@ using ECS;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using Unity.Mathematics;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
@@ -25,16 +26,18 @@ namespace ECS
             public float FireStartTime;
             [ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
 
-            public void Execute(Entity entity, int index, ref Rotation rotation, ref Firing firing, ref Translation translation)
+            public void Execute(Entity entity, int index, ref Rotation rotation, ref Firing firing,
+                ref Translation translation)
             {
                 if (!firing.IsFired)
                 {
-                    CreateBullet(FireStartTime,translation, rotation, EntityCommandBuffer);
+                    CreateBullet(FireStartTime, translation, rotation, EntityCommandBuffer);
                     firing.IsFired = true;
                 }
             }
 
-            private void CreateBullet(float fireStartTime,Translation translation, Rotation rotation, EntityCommandBuffer buffer)
+            private void CreateBullet(float fireStartTime, Translation translation, Rotation rotation,
+                EntityCommandBuffer buffer)
             {
                 //Debug.Log("Generate a bullet");
                 Entity entity = buffer.CreateEntity(BootStrap.BulletEntityArchetype);
@@ -51,7 +54,12 @@ namespace ECS
                 {
                     Value = BootStrap.Instance.bulletScale
                 });
-                buffer.SetComponent(entity, translation);
+                var pos = translation.Value;
+                
+                buffer.SetComponent(entity, new Translation
+                {
+                    Value = new float3(pos.x, pos.y, pos.z + BootStrap.Instance.shootOffset),
+                });
                 buffer.SetSharedComponent(entity, new RenderMesh
                 {
                     mesh = BootStrap.Instance.mesh,
@@ -61,7 +69,7 @@ namespace ECS
                 });
             }
         }
-
+        
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
             var job = new FiringJob()

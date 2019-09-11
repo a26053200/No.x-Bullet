@@ -47,6 +47,15 @@ namespace ECS
             }
         }
 
+        private struct FileLightJob : IJobForEachWithEntity<FireLight>
+        {
+            public float CurrTime;
+            public void Execute(Entity entity, int index, ref FireLight fireLight)
+            {
+                fireLight.StartTime = CurrTime;
+            }
+        }
+        
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
             if (Input.GetButton("Fire1"))
@@ -61,9 +70,13 @@ namespace ECS
                     EntityCommandBuffer = _buffer,
                     FireStartTime = Time.time,
                 };
-                inputDeps = job.Schedule(_weaponEntities.Length, 1, inputDeps);
+                var fileLightJob = new FileLightJob
+                {
+                    CurrTime = Time.time
+                };
+                inputDeps = job.Schedule(_weaponEntities.Length, 64, inputDeps);
                 _barrier.AddJobHandleForProducer(inputDeps);
-                
+                inputDeps = fileLightJob.Schedule(this, inputDeps);
             }
 
             return inputDeps;

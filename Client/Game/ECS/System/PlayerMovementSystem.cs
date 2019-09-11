@@ -9,31 +9,44 @@ namespace ECS
 {
     public class PlayerMovementSystem : ComponentSystem
     {
-        private float2 playerSize = new float2(1,1);
         protected override void OnUpdate()
         {
-            Entities.ForEach((ref Player player, ref Translation translation ,ref Rotation rotation, ref MoveSpeed moveSpeed, ref PlayerInput input) =>
+            Entities.ForEach((ref Player player, ref Translation translation, ref RotationEulerXYZ rotationEulerXyz,
+                ref MoveSpeed moveSpeed, ref PlayerInput input) =>
             {
-                var pos = translation.Value;
-                pos += new float3(
-                    input.Horizontal * Time.deltaTime * moveSpeed.Speed,
-                    0,
-                    input.Vertical * Time.deltaTime * moveSpeed.Speed);
-                Rect rect = BootStrap.Instance.cornerRect;
-                if (pos.x + playerSize.x > rect.x + rect.width)
-                    pos.x = rect.x + rect.width - playerSize.x;
-                else if (pos.x - playerSize.x < rect.x)
-                    pos.x = rect.x + playerSize.x;
-                if (pos.z + playerSize.y > rect.y + rect.height)
-                    pos.z = rect.y + rect.height - playerSize.y;
-                else if (pos.z - playerSize.y < rect.y)
-                    pos.z = rect.y + playerSize.y;
-                
-                
+                var pos = CalPos(input, translation.Value, moveSpeed.Speed);
+                ;
                 translation.Value = pos;
-                var rot = input.Rotation;
-                rotation.Value = rot;
+                var old = rotationEulerXyz.Value;
+                var radian = math.PI / 180f * 30f;
+                rotationEulerXyz.Value = new float3(0, 0, -radian * input.Horizontal);
             });
+
+            Entities.ForEach((ref FireLight fireLight, ref MoveSpeed moveSpeed, ref PlayerInput input) =>
+            {
+                fireLight.pos = CalPos(input, fireLight.pos, moveSpeed.Speed);
+            });
+        }
+
+        private float3 CalPos(PlayerInput input, float3 oldPos, float moveSpeed)
+        {
+            var pos = oldPos;
+            pos += new float3(
+                input.Horizontal * Time.deltaTime * moveSpeed,
+                0,
+                input.Vertical * Time.deltaTime * moveSpeed);
+            Rect rect = BootStrap.Instance.cornerRect;
+            float2 playerSize = BootStrap.Instance.playerSize;
+            if (pos.x + playerSize.x > rect.x + rect.width)
+                pos.x = rect.x + rect.width - playerSize.x;
+            else if (pos.x - playerSize.x < rect.x)
+                pos.x = rect.x + playerSize.x;
+            if (pos.z + playerSize.y > rect.y)
+                pos.z = rect.y - playerSize.y;
+            else if (pos.z - playerSize.y < rect.y - rect.height)
+                pos.z = rect.y - rect.height + playerSize.y;
+
+            return pos;
         }
     }
 }
