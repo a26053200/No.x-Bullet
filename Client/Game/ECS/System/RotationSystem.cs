@@ -2,7 +2,7 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace ECS
+namespace Game
 {
     public class RotationSystem : ComponentSystem
     {

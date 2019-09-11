@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 
-namespace ECS
+namespace Game
 {
     public class ClearShootingSystem : JobComponentSystem
     {
@@ -23,7 +23,7 @@ namespace ECS
 
             public void Execute(Entity entity, int index, ref Firing firing)
             {
-                if (CurrentTime - firing.FireStartTime > BootStrap.Instance.shootDeltaTime)
+                if (CurrentTime - firing.FireStartTime > ECSWorld.Instance.shootDeltaTime)
                 {
                     EntityCommandBuffer.RemoveComponent<Firing>(entity);
                 }

@@ -9,7 +9,7 @@ using Unity.Transforms;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace ECS
+namespace Game
 {
     public class PlayerShootingSystem : JobComponentSystem
     {
@@ -74,9 +74,9 @@ namespace ECS
                 {
                     CurrTime = Time.time
                 };
+                inputDeps = fileLightJob.Schedule(this, inputDeps);
                 inputDeps = job.Schedule(_weaponEntities.Length, 64, inputDeps);
                 _barrier.AddJobHandleForProducer(inputDeps);
-                inputDeps = fileLightJob.Schedule(this, inputDeps);
             }
 
             return inputDeps;

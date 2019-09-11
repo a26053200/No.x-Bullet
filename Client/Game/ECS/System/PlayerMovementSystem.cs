@@ -5,7 +5,7 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ECS
+namespace Game
 {
     public class PlayerMovementSystem : ComponentSystem
     {
@@ -35,8 +35,8 @@ namespace ECS
                 input.Horizontal * Time.deltaTime * moveSpeed,
                 0,
                 input.Vertical * Time.deltaTime * moveSpeed);
-            Rect rect = BootStrap.Instance.cornerRect;
-            float2 playerSize = BootStrap.Instance.playerSize;
+            Rect rect = ECSWorld.Instance.cornerRect;
+            float2 playerSize = ECSWorld.Instance.playerSize;
             if (pos.x + playerSize.x > rect.x + rect.width)
                 pos.x = rect.x + rect.width - playerSize.x;
             else if (pos.x - playerSize.x < rect.x)

@@ -2,7 +2,7 @@ using System.Numerics;
 using Unity.Entities;
 using Quaternion = UnityEngine.Quaternion;
 
-namespace ECS
+namespace Game
 {
     public struct PlayerInput : IComponentData
     {

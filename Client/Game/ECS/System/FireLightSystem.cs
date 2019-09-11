@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 
-namespace ECS
+namespace Game
 {
     public class FireLightSystem : ComponentSystem
     {
@@ -16,6 +16,7 @@ namespace ECS
                 }
                 light.enabled = fireLight.StartTime > 0;
                 var pos = fireLight.pos;
+                pos.y += 1;
                 pos.z += 1;
                 light.transform.position = pos;
             });

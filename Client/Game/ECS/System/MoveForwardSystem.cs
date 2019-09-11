@@ -5,7 +5,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-namespace ECS
+namespace Game
 {
     public class MoveForwardSystem : JobComponentSystem
     {

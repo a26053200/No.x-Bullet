@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-namespace ECS
+namespace Game
 {
     public struct FireLight : IComponentData
     {

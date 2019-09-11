@@ -2,7 +2,7 @@ using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
 
-namespace ECS
+namespace Game
 {
     public class PlayerInputSystem : ComponentSystem
     {

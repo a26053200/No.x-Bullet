@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace ECS
+namespace Game
 {
 
     public struct Weapon : IComponentData

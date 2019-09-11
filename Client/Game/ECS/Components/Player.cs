@@ -1,9 +1,10 @@
 using Unity.Entities;
 
-namespace ECS
+namespace Game
 {
     public struct Player : IComponentData
     {
-        public float damage;
+        public float Hp;
+        public float Damage;
     }
 }

@@ -1,4 +1,3 @@
-using ECS;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -9,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-namespace ECS
+namespace Game
 {
     public class FiringSystem : JobComponentSystem
     {
@@ -40,7 +39,7 @@ namespace ECS
                 EntityCommandBuffer buffer)
             {
                 //Debug.Log("Generate a bullet");
-                Entity entity = buffer.CreateEntity(BootStrap.BulletEntityArchetype);
+                Entity entity = buffer.CreateEntity(ECSWorld.BulletEntityArchetype);
                 buffer.SetComponent(entity, rotation);
                 buffer.SetComponent(entity, new Bullet
                 {
@@ -48,22 +47,22 @@ namespace ECS
                 });
                 buffer.SetComponent(entity, new MoveSpeed
                 {
-                    Speed = BootStrap.Instance.bulletSpeed
+                    Speed = ECSWorld.Instance.bulletSpeed
                 });
                 buffer.SetComponent(entity, new Scale
                 {
-                    Value = BootStrap.Instance.bulletScale
+                    Value = ECSWorld.Instance.bulletScale
                 });
                 var pos = translation.Value;
                 
                 buffer.SetComponent(entity, new Translation
                 {
-                    Value = new float3(pos.x, pos.y, pos.z + BootStrap.Instance.shootOffset),
+                    Value = new float3(pos.x, pos.y, pos.z + ECSWorld.Instance.shootOffset),
                 });
                 buffer.SetSharedComponent(entity, new RenderMesh
                 {
-                    mesh = BootStrap.Instance.mesh,
-                    material = BootStrap.Instance.material,
+                    mesh = ECSWorld.Instance.meshBullet,
+                    material = ECSWorld.Instance.materialBullet,
                     castShadows = ShadowCastingMode.On,
                     receiveShadows = true
                 });
