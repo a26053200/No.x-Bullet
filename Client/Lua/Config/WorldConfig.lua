@@ -53,8 +53,8 @@ WorldConfig.Battle = {
     subLevels = {
       [1] =
       {
-          level = "TopDown",
-          levelUrl = "Scenes/TopDown.unity",
+          level = "Stage1",
+          levelUrl = "Scenes/Stage1.unity",
       },
     },
     needLoading = true

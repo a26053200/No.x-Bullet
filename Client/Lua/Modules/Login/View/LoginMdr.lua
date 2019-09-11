@@ -51,9 +51,9 @@ function LoginMdr:validityInput(callback)
 end
 
 function LoginMdr:On_Click_BtnRegister()
-    self:validityInput(function()
-        self.loginService:HttpRegister(self.username, self.password, handler(self,self.OnHttpRegister))
-    end)
+    --self:validityInput(function()
+    --    self.loginService:HttpRegister(self.username, self.password, handler(self,self.OnHttpRegister))
+    --end)
     --Alert.Show("AlertAlertAlert",function ()
     --    Tips.Show("TipsTipsTips")
     --end)
