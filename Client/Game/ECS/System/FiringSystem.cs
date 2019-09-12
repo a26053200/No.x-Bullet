@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -17,28 +18,27 @@ namespace Game
         protected override void OnCreateManager()
         {
             _barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-//            Enabled = false;
+            //Enabled = false;
         }
-
-        private struct FiringJob : IJobForEachWithEntity_ECCC<Rotation, Firing, Translation>
+        
+        private struct FiringJob : IJobForEachWithEntity_ECCCC<Airplane, Rotation, Firing, Translation>
         {
             public float FireStartTime;
             [ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
 
-            public void Execute(Entity entity, int index, ref Rotation rotation, ref Firing firing,
+            public void Execute(Entity entity, int index,ref Airplane airplane, ref Rotation rotation, ref Firing firing,
                 ref Translation translation)
             {
                 if (!firing.IsFired)
                 {
-                    CreateBullet(FireStartTime, translation, rotation, EntityCommandBuffer);
+                    CreateBullet(airplane, FireStartTime, translation, rotation, EntityCommandBuffer);
                     firing.IsFired = true;
                 }
             }
 
-            private void CreateBullet(float fireStartTime, Translation translation, Rotation rotation,
+            private void CreateBullet(Airplane airplane,float fireStartTime, Translation translation, Rotation rotation,
                 EntityCommandBuffer buffer)
             {
-                //Debug.Log("Generate a bullet");
                 Entity entity = buffer.CreateEntity(ECSWorld.BulletEntityArchetype);
                 buffer.SetComponent(entity, rotation);
                 buffer.SetComponent(entity, new Bullet
@@ -47,24 +47,23 @@ namespace Game
                 });
                 buffer.SetComponent(entity, new MoveSpeed
                 {
-                    Speed = ECSWorld.Instance.bulletSpeed
+                    Speed = airplane.BulletSpeed
                 });
                 buffer.SetComponent(entity, new Scale
                 {
-                    Value = ECSWorld.Instance.bulletScale
+                    Value = airplane.BulletScale
                 });
                 var pos = translation.Value;
-                
                 buffer.SetComponent(entity, new Translation
                 {
-                    Value = new float3(pos.x, pos.y, pos.z + ECSWorld.Instance.shootOffset),
+                    Value = new float3(pos.x, pos.y, pos.z + airplane.ShootOffset),
                 });
                 buffer.SetSharedComponent(entity, new RenderMesh
                 {
                     mesh = ECSWorld.Instance.meshBullet,
                     material = ECSWorld.Instance.materialBullet,
-                    castShadows = ShadowCastingMode.On,
-                    receiveShadows = true
+                    castShadows = ShadowCastingMode.Off,
+                    receiveShadows = false
                 });
             }
         }

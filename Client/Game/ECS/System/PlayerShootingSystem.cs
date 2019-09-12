@@ -21,14 +21,14 @@ namespace Game
         protected override void OnCreate()
         {
             _query = GetEntityQuery(
-                ComponentType.ReadWrite<Weapon>(),
+                ComponentType.ReadWrite<Player>(),
                 ComponentType.Exclude<Firing>());
             _barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-//            Enabled = false;
+            //Enabled = false;
         }
 
 
-        //[BurstCompile]
+        //[BurstCompile] 
         private struct PlayerShootingJob : IJobParallelFor
         {
             public float FireStartTime;
@@ -37,13 +37,10 @@ namespace Game
 
             public void Execute(int index)
             {
-                //if (FireStartTime > 0)
+                EntityCommandBuffer.AddComponent(Entities[index], new Firing()
                 {
-                    EntityCommandBuffer.AddComponent(Entities[index], new Firing()
-                    {
-                        FireStartTime = FireStartTime
-                    });
-                }
+                    FireStartTime = FireStartTime
+                });
             }
         }
 
@@ -70,11 +67,11 @@ namespace Game
                     EntityCommandBuffer = _buffer,
                     FireStartTime = Time.time,
                 };
-                var fileLightJob = new FileLightJob
-                {
-                    CurrTime = Time.time
-                };
-                inputDeps = fileLightJob.Schedule(this, inputDeps);
+//                var fileLightJob = new FileLightJob
+//                {
+//                    CurrTime = Time.time
+//                };
+//                inputDeps = fileLightJob.Schedule(this, inputDeps);
                 inputDeps = job.Schedule(_weaponEntities.Length, 64, inputDeps);
                 _barrier.AddJobHandleForProducer(inputDeps);
             }

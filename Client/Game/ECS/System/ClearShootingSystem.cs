@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -15,15 +16,16 @@ namespace Game
             _barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 //            Enabled = false;
         }
-        private struct ClearShootingJob : IJobForEachWithEntity<Firing>
+        //[BurstCompile]
+        private struct ClearShootingJob : IJobForEachWithEntity<Airplane, Firing>
         {
             public float CurrentTime;
             [ReadOnly]
             public EntityCommandBuffer EntityCommandBuffer;
 
-            public void Execute(Entity entity, int index, ref Firing firing)
+            public void Execute(Entity entity, int index,ref Airplane airplane, ref Firing firing)
             {
-                if (CurrentTime - firing.FireStartTime > ECSWorld.Instance.shootDeltaTime)
+                if (CurrentTime - firing.FireStartTime > airplane.ShootIntervalTime)
                 {
                     EntityCommandBuffer.RemoveComponent<Firing>(entity);
                 }

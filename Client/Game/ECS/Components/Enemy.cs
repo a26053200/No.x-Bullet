@@ -6,5 +6,7 @@ namespace Game
     {
         public float Hp;
         public float Damage;
+        public float BornTime;
+        public float LifeTime;
     }
 }

@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -17,6 +18,7 @@ namespace Game
 //            Enabled = false;
         }
 
+        [BurstCompile]
         private struct MoveForwardJob : IJobForEachWithEntity_ECCCC<Translation,MoveSpeed,Rotation,Bullet>
         {
             public float CurrentTime;
