@@ -13,49 +13,72 @@ local BaseMediator = require("Game.Core.Ioc.BaseMediator")
 ---@class Game.Modules.Battle.View.BattleMdr : Game.Core.Ioc.BaseMediator
 ---@field battleModel Game.Modules.Battle.Model.BattleModel
 ---@field battleService Game.Modules.Battle.Service.BattleService
----@field mainHero Game.Modules.Battle.Items.MainHero
----@field attachCamera Game.Modules.Common.Camera.AttachCamera
----@field points table<number, UnityEngine.Vector3>
----@field battleBehavior Game.Modules.Battle.Behaviors.BattleBehavior
----@field bornAreas table<number, Game.Modules.Battle.Behaviors.BornArea>
 ---@field ecsWorld Game.ECSWorld
+---@field viewPortRect UnityEngine.Rect
+---@field startTime number
+---@field enemyBornIntervalTime number
 local BattleMdr = class("BattleMdr",BaseMediator)
 
 function BattleMdr:OnInit()
-
     World.root = GameObject.New("[World]")
     self.ecsWorld = GameObject.Find("BootStrap"):GetComponent(typeof(Game.ECSWorld))
     self.ecsWorld:Launch()
 
-    --local pointsObj = self.scene.currSubScene:GetRootObjByName("Points")
-    --self.points = {}
-    --for i = 1, 6 do
-    --    self.points[i] = pointsObj:FindChild("p" .. i).transform.position
-    --end
-    --World.points = self.points
-    --local aStarObj = vmgr.scene.currSubScene:GetRootObjByName("A*")
-    --World.grid = aStarObj:GetComponent(typeof(AStar.Grid))
-    --
-    --
-    --self.mainHero = MainHero.New(AvatarConfig.Get("TestHero"))
-    --self.mainHero.transform.position = self.points[1]
-    --World.mainHero = self.mainHero
-    --
-    --self.attachCamera = AttachCamera.New(Camera.main)
-    --self.attachCamera:Attach(self.mainHero.gameObject)
-    --
-    --local battleInfo = require("Game.Config.Excel.Battle_Test") ---@type BattleInfo
-    --
-    --self.battleBehavior = BattleBehavior.New(battleInfo, self.gameObject)
-    --self.battleBehavior:CreateBattle()
-    --
-    --self:StartBattle()
+    self.viewPortRect = self.ecsWorld.cornerRect
+    log(self.viewPortRect.x)
+
+    self.startTime = Time.time
+    self.enemyBornIntervalTime = math.random(1.01,3.01)
+    self:CreateHeroAirplane()
 end
 
-function BattleMdr:StartBattle()
-    --DelayCallback(1, Handler.New(function()
-    --    self.mainHero:SetBehaviorEnable(true)
-    --end, self))
+function BattleMdr:CreateHeroAirplane()
+    local mesh = Res.LoadMesh("Models/StarSparrow/Models/StarSparrow1.mesh")
+    local material = Res.LoadMaterial("Models/StarSparrow/Materials/StarSparrow1.mat")
+    local airplaneInfo = Game.AirplaneInfo.New(mesh, material,LayerMask.NameToLayer("Hero"))
+    local size = Vector2.New(0.5,1)
+    airplaneInfo.BornPos = Vector3.New(
+            0,
+            0,
+            self.viewPortRect.y - self.viewPortRect.height + size.y
+    )
+    airplaneInfo.Size = size
+    airplaneInfo.Scale = 0.5
+    airplaneInfo.BulletSpeed = 30
+    airplaneInfo.BulletScale = 0.2
+    airplaneInfo.ShootOffset = 0.7
+    self.ecsWorld:CreateAirplane(airplaneInfo)
+end
+
+function BattleMdr:CreateEnemyAirplane()
+    local mesh = Res.LoadMesh("Models/StarSparrow/Models/StarSparrow1.mesh")
+    local material = Res.LoadMaterial("Models/StarSparrow/Materials/StarSparrow1.mat")
+    local airplaneInfo = Game.AirplaneInfo.New(mesh, material,LayerMask.NameToLayer("Enemy"))
+    local size = Vector2.New(1,1)
+    --随机出生点
+    airplaneInfo.BornPos = Vector3.New(
+            math.random(self.viewPortRect.x + size.x, self.viewPortRect.x + self.viewPortRect.width - size.x),
+            0,
+            self.viewPortRect.y + size.y
+    )
+    airplaneInfo.Size = size
+    airplaneInfo.MoveSpeed = 6 + math.random(0.01,6.01)
+    airplaneInfo.RotationY = 180
+    airplaneInfo.Scale = 0.5
+    airplaneInfo.BulletSpeed = 30
+    airplaneInfo.BulletScale = 0.2
+    airplaneInfo.ShootOffset = 0.7
+    airplaneInfo.LifeTime = 4
+    self.ecsWorld:CreateAirplane(airplaneInfo)
+end
+
+function BattleMdr:Update()
+    --每隔一段时间产生一架敌机
+    if Time.time - self.startTime > self.enemyBornIntervalTime then
+        self.startTime = Time.time
+        self.enemyBornIntervalTime = math.random(0.5,1)
+        self:CreateEnemyAirplane()
+    end
 end
 
 return BattleMdr

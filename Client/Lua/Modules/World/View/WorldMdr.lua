@@ -22,6 +22,8 @@ end
 
 function WorldMdr:OnInit()
     self:EnterScene(WorldConfig.Login)
+
+    --self.gameObject:AddComponent(typeof(Framework.ShowFPS))
 end
 
 function WorldMdr:GetTempLevel()
