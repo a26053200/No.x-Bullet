@@ -21,6 +21,7 @@ end
 
 function MediatorContext:Launch()
     --TODO
+	self.binder:Bind(require("Game.Modules.Battle.View.BattleInfoMdr")):To(ViewConfig.BattleInfo.name)
 	self.binder:Bind(require("Game.Modules.Battle.View.BattleMdr")):To(ViewConfig.Battle.name)
 	self.binder:Bind(require("Game.Modules.Loading.View.LoadingMdr")):To(ViewConfig.Loading.name)
 	self.binder:Bind(require("Game.Modules.Login.View.LoginMdr")):To(ViewConfig.Login.name)

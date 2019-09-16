@@ -30,6 +30,8 @@ function BattleMdr:OnInit()
     self.startTime = Time.time
     self.enemyBornIntervalTime = math.random(1.01,3.01)
     self:CreateHeroAirplane()
+
+    vmgr:LoadView(ViewConfig.BattleInfo)
 end
 
 function BattleMdr:CreateHeroAirplane()
@@ -47,6 +49,9 @@ function BattleMdr:CreateHeroAirplane()
     airplaneInfo.BulletSpeed = 30
     airplaneInfo.BulletScale = 0.2
     airplaneInfo.ShootOffset = 0.7
+    airplaneInfo.MaxHp = math.random(50, 100)
+    airplaneInfo.BoxSize = Vector3.New(0.5,0.5,0.5)
+    airplaneInfo.Damage = math.random(10, 30)
     self.ecsWorld:CreateAirplane(airplaneInfo)
 end
 
@@ -69,6 +74,9 @@ function BattleMdr:CreateEnemyAirplane()
     airplaneInfo.BulletScale = 0.2
     airplaneInfo.ShootOffset = 0.7
     airplaneInfo.LifeTime = 4
+    airplaneInfo.MaxHp = math.random(50, 100)
+    airplaneInfo.BoxSize = Vector3.New(1,1,1)
+    airplaneInfo.Damage = 10
     self.ecsWorld:CreateAirplane(airplaneInfo)
 end
 
