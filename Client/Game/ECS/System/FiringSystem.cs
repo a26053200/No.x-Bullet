@@ -43,7 +43,9 @@ namespace Game
                 buffer.SetComponent(entity, rotation);
                 buffer.SetComponent(entity, new Bullet
                 {
-                    StartTime = fireStartTime
+                    StartTime = fireStartTime,
+                    BoxSize = new float3(0.1f,0.1f,0.1f),
+                    Damage = airplane.Damage
                 });
                 buffer.SetComponent(entity, new MoveSpeed
                 {

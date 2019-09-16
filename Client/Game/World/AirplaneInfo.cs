@@ -31,10 +31,16 @@ namespace Game
         public float BulletScale = 1f;
 
         public Vector2 Size = new Vector2(1f, 2f);
+        
+        public Vector3 BoxSize = new Vector3(1f,1f,1f);
 
         public float ShootOffset = 0.5f;
 
         public float LifeTime = 10f;
+
+        public float MaxHp = 100f;
+
+        public float Damage = 20f;
         
         public AirplaneInfo(Mesh mesh, Material material, int layer)
         {

@@ -6,21 +6,37 @@ using Unity.Transforms;
 
 namespace Game
 {
-    public class AABBColliderMoveSystem: JobComponentSystem
+    public class BulletColliderMoveSystem: JobComponentSystem
     {
         [BurstCompile]
-        private struct AABBColliderMoveJob : IJobForEachWithEntity<AABBCollider, Translation>
+        private struct AABBColliderMoveJob : IJobForEachWithEntity<AABBCollider, Translation, Airplane>
         {
-            public void Execute(Entity entity, int index, ref AABBCollider aabb, ref Translation translation)
+            public void Execute(Entity entity, int index, ref AABBCollider aabb, ref Translation translation, ref Airplane airplane)
             {
                 aabb.Box.Center = translation.Value;
-                aabb.Box.Extents = new float3(1,1,1);
+                aabb.Box.Extents = airplane.BoxSize;
+                aabb.MinMaxBox = aabb.Box;
             }
         }
+        
+        [BurstCompile]
+        private struct AABBColliderBulletMoveJob : IJobForEachWithEntity<AABBCollider, Translation, Bullet>
+        {
+            public void Execute(Entity entity, int index, ref AABBCollider aabb, ref Translation translation, ref Bullet bullet)
+            {
+                aabb.Box.Center = translation.Value;
+                aabb.Box.Extents = bullet.BoxSize;
+                aabb.MinMaxBox = aabb.Box;
+            }
+        }
+        
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
             var job = new AABBColliderMoveJob();
-            return job.Schedule(this, inputDeps);
+            inputDeps = job.Schedule(this, inputDeps);
+            var job1 = new AABBColliderBulletMoveJob();
+            inputDeps = job1.Schedule(this, inputDeps);
+            return inputDeps;
         }
     }
 }

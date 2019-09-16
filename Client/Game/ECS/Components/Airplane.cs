@@ -6,6 +6,10 @@ namespace Game
 {
     public struct Airplane : IComponentData
     {
+        public float Hp;
+        public float MaxHp;
+        public float Damage;
+        
         public float ShootIntervalTime;
         
         public float ShootOffset;
@@ -15,5 +19,7 @@ namespace Game
         public float BulletScale;
 
         public float2 PlayerSize;
+
+        public float3 BoxSize;
     }
 }

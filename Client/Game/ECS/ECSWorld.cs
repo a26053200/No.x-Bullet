@@ -93,7 +93,7 @@ namespace Game
                 material = info.Material,
                 castShadows = info.ShadowCastingMode,
                 receiveShadows = info.ReceiveShadows,
-                layer = info.Layer
+                layer = info.Layer,
             });
             _entityManager.SetComponentData(entity, new Airplane()
             {
@@ -104,6 +104,10 @@ namespace Game
                 ShootIntervalTime = info.ShootIntervalTime,
                 ShootOffset = info.ShootOffset,
                 PlayerSize = info.Size,
+                BoxSize = info.BoxSize,
+                Hp = info.MaxHp,
+                MaxHp = info.MaxHp,
+                Damage = info.Damage
             });
             if (info.Layer == LayerMask.NameToLayer("Hero"))
             {
@@ -112,6 +116,7 @@ namespace Game
             else
             {
                 _entityManager.AddComponent<Enemy>(entity);
+                _entityManager.AddComponent<AABBCollider>(entity);
                 _entityManager.SetComponentData(entity, new Enemy
                 {
                     BornTime = Time.time,
