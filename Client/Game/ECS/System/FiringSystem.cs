@@ -26,7 +26,7 @@ namespace Game
             public float FireStartTime;
             [ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
 
-            public void Execute(Entity entity, int index,ref Airplane airplane, ref Rotation rotation, ref Firing firing,
+            public void Execute(Entity entity, int index,[ReadOnly] ref Airplane airplane, [ReadOnly] ref Rotation rotation, [ReadOnly] ref Firing firing,
                 ref Translation translation)
             {
                 if (!firing.IsFired)

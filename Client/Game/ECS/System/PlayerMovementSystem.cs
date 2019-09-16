@@ -16,7 +16,7 @@ namespace Game
             public Rect Rect;
             public float DeltaTime;
             
-            public void Execute(Entity entity, int index, [ReadOnly] ref Player player,[ReadOnly] ref Airplane airplane,[ReadOnly] ref Translation translation,
+            public void Execute(Entity entity, int index, [ReadOnly] ref Player player,[ReadOnly] ref Airplane airplane,ref Translation translation,
                 ref RotationEulerXYZ rotationEulerXyz,
                 ref MoveSpeed moveSpeed, ref PlayerInput input)
             {

@@ -14,6 +14,8 @@ namespace Game
     public class ECSWorld : MonoBehaviour
     {
         public static ECSWorld Instance;
+
+        public int score;
         
         [SerializeField]
         public Mesh meshBullet;

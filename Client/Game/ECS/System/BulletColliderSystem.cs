@@ -39,8 +39,11 @@ namespace Game
                         collider.CollideCount += 1;
                         airplane.Hp = math.max(0f,airplane.Hp - Bullets[i].Damage);
                         EntityCommandBuffer.DestroyEntity(Entities[i]);
-                        if(airplane.Hp <= 0)
+                        if (airplane.Hp <= 0)
+                        {
                             EntityCommandBuffer.DestroyEntity(entity);
+                            ECSWorld.Instance.score++;
+                        }
                         break;
                     }
                 }
