@@ -23,8 +23,16 @@ namespace Game
         [SerializeField]
         public Material materialBullet;
         
+        [SerializeField]
+        public Mesh meshBlast;
+        
+        [SerializeField]
+        public Material materialBlast;
+        
         public static EntityArchetype BulletEntityArchetype;
 
+        public static EntityArchetype BlastEntityArchetype;
+        
         public GameObjectEntity pointLightEntity;
 
         public Rect cornerRect;
@@ -49,7 +57,7 @@ namespace Game
                 typeof(Translation),
                 typeof(RenderMesh),
                 typeof(LocalToWorld),
-                typeof(Scale),
+                typeof(NonUniformScale),
                 typeof(CompositeRotation),
                 typeof(Rotation),
                 typeof(RotationEulerXYZ),
@@ -61,11 +69,23 @@ namespace Game
                 typeof(Translation),
                 typeof(RenderMesh),
                 typeof(LocalToWorld),
-                typeof(CompositeRotation),
+                //typeof(LocalToParent),
+                //typeof(ParentScaleInverse),
+                //typeof(CompositeScale),
+                //typeof(CompositeRotation),
                 typeof(Rotation),
-                typeof(Scale),
+                typeof(NonUniformScale),
                 typeof(AABBCollider),
                 typeof(Bullet)
+            );
+            
+            BlastEntityArchetype = _entityManager.CreateArchetype(
+                typeof(Translation),
+                typeof(RenderMesh),
+                typeof(LocalToWorld),
+                typeof(NonUniformScale),
+                typeof(Rotation),
+                typeof(Blast)
             );
 
 //            _entityManager.AddComponent<FireLight>(pointLightEntity.Entity);
@@ -88,7 +108,7 @@ namespace Game
             {
                 Value = new float3(0, radian, 0)
             });
-            _entityManager.SetComponentData(entity, new Scale() {Value = info.Scale});
+            _entityManager.SetComponentData(entity, new NonUniformScale() {Value = info.Scale});
             _entityManager.SetSharedComponentData(entity, new RenderMesh
             {
                 mesh = info.Mesh,
@@ -103,6 +123,8 @@ namespace Game
                 //MaterialBullet = info.MaterialBullet,
                 BulletScale = info.BulletScale,
                 BulletSpeed = info.BulletSpeed,
+                BulletEuler = info.BulletEuler,
+                BulletBlastDuration = info.BulletBlastDuration,
                 ShootIntervalTime = info.ShootIntervalTime,
                 ShootOffset = info.ShootOffset,
                 PlayerSize = info.Size,

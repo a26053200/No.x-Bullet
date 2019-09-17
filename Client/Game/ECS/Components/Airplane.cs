@@ -16,7 +16,11 @@ namespace Game
         
         public float BulletSpeed;
 
-        public float BulletScale;
+        public float BulletBlastDuration;
+        
+        public float3 BulletEuler;
+
+        public float3 BulletScale;
 
         public float2 PlayerSize;
 

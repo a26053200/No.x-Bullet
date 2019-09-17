@@ -1,4 +1,3 @@
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
@@ -7,7 +6,6 @@ using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.UI;
 
 namespace Game
 {
@@ -31,27 +29,31 @@ namespace Game
             {
                 if (!firing.IsFired)
                 {
-                    CreateBullet(airplane, FireStartTime, translation, rotation, EntityCommandBuffer);
+                    CreateBullet(airplane, FireStartTime, translation, EntityCommandBuffer);
                     firing.IsFired = true;
                 }
             }
 
-            private void CreateBullet(Airplane airplane,float fireStartTime, Translation translation, Rotation rotation,
-                EntityCommandBuffer buffer)
+            private void CreateBullet(Airplane airplane,float fireStartTime, Translation translation, EntityCommandBuffer buffer)
             {
                 Entity entity = buffer.CreateEntity(ECSWorld.BulletEntityArchetype);
-                buffer.SetComponent(entity, rotation);
+                float radian = math.PI / 180f;
+                buffer.SetComponent(entity, new Rotation
+                {
+                    Value = quaternion.Euler(airplane.BulletEuler * radian, math.RotationOrder.Default)
+                });
                 buffer.SetComponent(entity, new Bullet
                 {
                     StartTime = fireStartTime,
                     BoxSize = new float3(0.1f,0.1f,0.1f),
-                    Damage = airplane.Damage
+                    Damage = airplane.Damage,
+                    BlastDuration = airplane.BulletBlastDuration
                 });
                 buffer.SetComponent(entity, new MoveSpeed
                 {
                     Speed = airplane.BulletSpeed
                 });
-                buffer.SetComponent(entity, new Scale
+                buffer.SetComponent(entity, new NonUniformScale
                 {
                     Value = airplane.BulletScale
                 });
