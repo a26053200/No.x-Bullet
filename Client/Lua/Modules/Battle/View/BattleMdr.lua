@@ -28,7 +28,7 @@ function BattleMdr:OnInit()
     log(self.viewPortRect.x)
 
     self.startTime = Time.time
-    self.enemyBornIntervalTime = math.random(1.01, 3.01)
+    self.enemyBornIntervalTime = 3
     self:CreateHeroAirplane()
 
     vmgr:LoadView(ViewConfig.BattleInfo)
@@ -52,7 +52,7 @@ function BattleMdr:CreateHeroAirplane()
     airplaneInfo.BulletBlastDuration = 0.2
     airplaneInfo.ShootOffset = 0.7
     airplaneInfo.MaxHp = math.random(50, 100)
-    airplaneInfo.BoxSize = Vector3.New(0.5, 0.5, 0.5)
+    airplaneInfo.BoxSize = Vector3.New(0.5, 0.1, 0.5)
     airplaneInfo.Damage = math.random(10, 30)
     self.ecsWorld:CreateAirplane(airplaneInfo)
 end
@@ -61,7 +61,7 @@ function BattleMdr:CreateEnemyAirplane()
     local mesh = Res.LoadMesh("Models/StarSparrow/Models/StarSparrow1.mesh")
     local material = Res.LoadMaterial("Models/StarSparrow/Materials/StarSparrow1.mat")
     local airplaneInfo = Game.AirplaneInfo.New(mesh, material, LayerMask.NameToLayer("Enemy"))
-    local scale = math.random(0.4, 0.8)
+    local scale = 0.3 + math.random() * 0.2
     local size = Vector2.New(1, 1) * scale
     --随机出生点
     airplaneInfo.BornPos = Vector3.New(
@@ -72,13 +72,13 @@ function BattleMdr:CreateEnemyAirplane()
     airplaneInfo.Size = size
     airplaneInfo.MoveSpeed = 3 + math.random(0.01, 3.01)
     airplaneInfo.RotationY = 180
-    airplaneInfo.Scale = Vector3.New(scale, 0.4, scale)
+    airplaneInfo.Scale = Vector3.New(scale, 0.1, scale)
     airplaneInfo.BulletSpeed = 30
     airplaneInfo.BulletScale = Vector3.New(0.4, 0.5, 1)
     airplaneInfo.ShootOffset = 0.7
     airplaneInfo.LifeTime = 4
-    airplaneInfo.MaxHp = math.random(50, 100)
-    airplaneInfo.BoxSize = Vector3.New(1, 1, 1) * scale
+    airplaneInfo.MaxHp = math.random(20, 100)
+    airplaneInfo.BoxSize = Vector3.New(1, 0.1, 1) * scale
     airplaneInfo.Damage = 10
     self.ecsWorld:CreateAirplane(airplaneInfo)
 end
@@ -86,6 +86,7 @@ end
 function BattleMdr:Update()
     --每隔一段时间产生一架敌机
     if Time.time - self.startTime > self.enemyBornIntervalTime then
+        Game.ECSWorld.Instance:StartGame()
         self.startTime = Time.time
         self.enemyBornIntervalTime = math.random(0.5, 1)
         self:CreateEnemyAirplane()
