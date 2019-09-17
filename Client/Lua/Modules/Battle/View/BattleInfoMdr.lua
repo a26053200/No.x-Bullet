@@ -21,7 +21,9 @@ function BattleInfoMdr:RegisterListeners()
 end
 
 function BattleInfoMdr:Update()
-    self.scoreText.text = Game.ECSWorld.Instance.score .. ""
+    if self.scoreText then
+        self.scoreText.text = Game.ECSWorld.Instance.score .. ""
+    end
 end
 
 return BattleInfoMdr

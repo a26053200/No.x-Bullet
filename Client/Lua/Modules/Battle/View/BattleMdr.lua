@@ -17,7 +17,7 @@ local BaseMediator = require("Game.Core.Ioc.BaseMediator")
 ---@field viewPortRect UnityEngine.Rect
 ---@field startTime number
 ---@field enemyBornIntervalTime number
-local BattleMdr = class("BattleMdr",BaseMediator)
+local BattleMdr = class("BattleMdr", BaseMediator)
 
 function BattleMdr:OnInit()
     World.root = GameObject.New("[World]")
@@ -28,7 +28,7 @@ function BattleMdr:OnInit()
     log(self.viewPortRect.x)
 
     self.startTime = Time.time
-    self.enemyBornIntervalTime = math.random(1.01,3.01)
+    self.enemyBornIntervalTime = math.random(1.01, 3.01)
     self:CreateHeroAirplane()
 
     vmgr:LoadView(ViewConfig.BattleInfo)
@@ -37,20 +37,22 @@ end
 function BattleMdr:CreateHeroAirplane()
     local mesh = Res.LoadMesh("Models/StarSparrow/Models/StarSparrow1.mesh")
     local material = Res.LoadMaterial("Models/StarSparrow/Materials/StarSparrow1.mat")
-    local airplaneInfo = Game.AirplaneInfo.New(mesh, material,LayerMask.NameToLayer("Hero"))
-    local size = Vector2.New(0.5,1)
+    local airplaneInfo = Game.AirplaneInfo.New(mesh, material, LayerMask.NameToLayer("Hero"))
+    local size = Vector2.New(0.5, 1)
     airplaneInfo.BornPos = Vector3.New(
             0,
             0,
             self.viewPortRect.y - self.viewPortRect.height + size.y
     )
     airplaneInfo.Size = size
-    airplaneInfo.Scale = 0.5
+    airplaneInfo.Scale = Vector3.New(0.5, 0.5, 0.5)
     airplaneInfo.BulletSpeed = 30
-    airplaneInfo.BulletScale = 0.2
+    airplaneInfo.BulletScale = Vector3.New(0.5, 1, 1)
+    airplaneInfo.BulletEuler = Vector3.New(90, 180, 0)
+    airplaneInfo.BulletBlastDuration = 0.2
     airplaneInfo.ShootOffset = 0.7
     airplaneInfo.MaxHp = math.random(50, 100)
-    airplaneInfo.BoxSize = Vector3.New(0.5,0.5,0.5)
+    airplaneInfo.BoxSize = Vector3.New(0.5, 0.5, 0.5)
     airplaneInfo.Damage = math.random(10, 30)
     self.ecsWorld:CreateAirplane(airplaneInfo)
 end
@@ -58,8 +60,9 @@ end
 function BattleMdr:CreateEnemyAirplane()
     local mesh = Res.LoadMesh("Models/StarSparrow/Models/StarSparrow1.mesh")
     local material = Res.LoadMaterial("Models/StarSparrow/Materials/StarSparrow1.mat")
-    local airplaneInfo = Game.AirplaneInfo.New(mesh, material,LayerMask.NameToLayer("Enemy"))
-    local size = Vector2.New(1,1)
+    local airplaneInfo = Game.AirplaneInfo.New(mesh, material, LayerMask.NameToLayer("Enemy"))
+    local scale = math.random(0.4, 0.8)
+    local size = Vector2.New(1, 1) * scale
     --随机出生点
     airplaneInfo.BornPos = Vector3.New(
             math.random(self.viewPortRect.x + size.x, self.viewPortRect.x + self.viewPortRect.width - size.x),
@@ -67,15 +70,15 @@ function BattleMdr:CreateEnemyAirplane()
             self.viewPortRect.y + size.y
     )
     airplaneInfo.Size = size
-    airplaneInfo.MoveSpeed = 6 + math.random(0.01,6.01)
+    airplaneInfo.MoveSpeed = 3 + math.random(0.01, 3.01)
     airplaneInfo.RotationY = 180
-    airplaneInfo.Scale = 0.5
+    airplaneInfo.Scale = Vector3.New(scale, 0.4, scale)
     airplaneInfo.BulletSpeed = 30
-    airplaneInfo.BulletScale = 0.2
+    airplaneInfo.BulletScale = Vector3.New(0.4, 0.5, 1)
     airplaneInfo.ShootOffset = 0.7
     airplaneInfo.LifeTime = 4
     airplaneInfo.MaxHp = math.random(50, 100)
-    airplaneInfo.BoxSize = Vector3.New(1,1,1)
+    airplaneInfo.BoxSize = Vector3.New(1, 1, 1) * scale
     airplaneInfo.Damage = 10
     self.ecsWorld:CreateAirplane(airplaneInfo)
 end
@@ -84,7 +87,7 @@ function BattleMdr:Update()
     --每隔一段时间产生一架敌机
     if Time.time - self.startTime > self.enemyBornIntervalTime then
         self.startTime = Time.time
-        self.enemyBornIntervalTime = math.random(0.5,1)
+        self.enemyBornIntervalTime = math.random(0.5, 1)
         self:CreateEnemyAirplane()
     end
 end
