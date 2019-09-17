@@ -20,7 +20,7 @@ namespace Game
                 ref MoveSpeed moveSpeed, ref PlayerInput input)
             {
                 var pos = translation.Value;
-                pos += new float3(0, 0, -DeltaTime * moveSpeed.Speed);
+                pos += new float3(0, 0, -DeltaTime * moveSpeed.Speed * enemy.SpeedScale);
                 translation.Value = pos;
             }
         }

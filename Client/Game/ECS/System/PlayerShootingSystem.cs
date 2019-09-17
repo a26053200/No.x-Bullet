@@ -32,8 +32,8 @@ namespace Game
         private struct PlayerShootingJob : IJobParallelFor
         {
             public float FireStartTime;
+            [ReadOnly] public NativeArray<Entity> Entities;
             [ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
-            public NativeArray<Entity> Entities;
 
             public void Execute(int index)
             {
@@ -55,35 +55,21 @@ namespace Game
         
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            if (Input.GetButton("Fire1"))
+            if (ECSWorld.Instance.isStart)
             {
-                _buffer = _barrier.CreateCommandBuffer();
-                if(_weaponEntities != null && _weaponEntities.Length > 0)
-                    _weaponEntities.Dispose();
                 _weaponEntities = _query.ToEntityArray(Allocator.TempJob);
                 var job = new PlayerShootingJob()
                 {
                     Entities = _weaponEntities,
-                    EntityCommandBuffer = _buffer,
+                    EntityCommandBuffer = _barrier.CreateCommandBuffer(),
                     FireStartTime = Time.time,
                 };
-//                var fileLightJob = new FileLightJob
-//                {
-//                    CurrTime = Time.time
-//                };
-//                inputDeps = fileLightJob.Schedule(this, inputDeps);
-                inputDeps = job.Schedule(_weaponEntities.Length, 64, inputDeps);
-                _barrier.AddJobHandleForProducer(inputDeps);
-            }
-
-            return inputDeps;
-        }
-
-        protected override void OnCreateManager()
-        {
-            //_buffer.Dispose();
-//            if(_weaponEntities.Length > 0)
-//                _weaponEntities.Dispose();
+                var jobHandle = job.Schedule(_weaponEntities.Length, 64, inputDeps);
+                jobHandle.Complete();
+                _weaponEntities.Dispose();
+                return jobHandle;
+            }else
+                return inputDeps;
         }
     }
 }

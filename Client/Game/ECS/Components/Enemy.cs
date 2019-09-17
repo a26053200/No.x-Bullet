@@ -6,5 +6,6 @@ namespace Game
     {
         public float BornTime;
         public float LifeTime;
+        public float SpeedScale;
     }
 }

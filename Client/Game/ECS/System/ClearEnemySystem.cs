@@ -1,6 +1,7 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace Game
@@ -16,15 +17,15 @@ namespace Game
 //            Enabled = false;
         }
         
-        private struct ClearEnemyJob : IJobForEachWithEntity<Enemy>
+        private struct ClearEnemyJob : IJobForEachWithEntity<Enemy, Translation>
         {
             public float CurrentTime;
             [ReadOnly]
             public EntityCommandBuffer EntityCommandBuffer;
 
-            public void Execute(Entity entity, int index,ref Enemy enemy)
+            public void Execute(Entity entity, int index,ref Enemy enemy,ref Translation translation)
             {
-                if (CurrentTime - enemy.BornTime > enemy.LifeTime)
+                if (enemy.BornTime > enemy.LifeTime && translation.Value.z < ECSWorld.Instance.cornerRect.y - ECSWorld.Instance.cornerRect.height)
                 {
                     EntityCommandBuffer.DestroyEntity(entity);
                 }

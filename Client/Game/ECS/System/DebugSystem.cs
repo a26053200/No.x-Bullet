@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Game
 {
+#if UNITY_EDITOR
     public class DebugSystem : ComponentSystem
     {
         protected override void OnCreateManager()
@@ -27,9 +28,9 @@ namespace Game
                 var d3 = new float3(min.x + x, min.y, min.z + z);
                 var d4 = new float3(min.x, min.y, min.z + z);
                 var u1 = max;
-                var u2 = new float3(max.x + x, max.y, max.z);
-                var u3 = new float3(max.x + x, max.y, max.z + z);
-                var u4 = new float3(max.x, max.y, max.z + z);
+                var u2 = new float3(max.x - x, max.y, max.z);
+                var u3 = new float3(max.x - x, max.y, max.z - z);
+                var u4 = new float3(max.x, max.y, max.z - z);
                 Debug.DrawLine(d1, d2, Color.yellow);
                 Debug.DrawLine(d2, d3, Color.yellow);
                 Debug.DrawLine(d3, d4, Color.yellow);
@@ -39,7 +40,15 @@ namespace Game
                 Debug.DrawLine(u2, u3, Color.yellow);
                 Debug.DrawLine(u3, u4, Color.yellow);
                 Debug.DrawLine(u4, u1, Color.yellow);
+                
+                Debug.DrawLine(u3, d1, Color.yellow);
+                Debug.DrawLine(u4, d2, Color.yellow);
+                Debug.DrawLine(u2, d4, Color.yellow);
+                Debug.DrawLine(u1, d3, Color.yellow);
             });
+
+            
         }
     }
+#endif
 }

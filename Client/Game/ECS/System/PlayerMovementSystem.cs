@@ -10,6 +10,11 @@ namespace Game
 {
     public class PlayerMovementSystem : JobComponentSystem
     {
+        protected override void OnCreate()
+        {
+            Enabled = false;
+        }
+
         [BurstCompile]
         private struct PlayerMovementJob : IJobForEachWithEntity_ECCCCCC<Player,Airplane,Translation,RotationEulerXYZ,MoveSpeed,PlayerInput>
         {

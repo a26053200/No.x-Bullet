@@ -43,8 +43,10 @@ namespace Game
                         collider.CollideCount += 1;
                         airplane.Hp = math.max(0f,airplane.Hp - Bullets[i].Damage);
                         EntityCommandBuffer.DestroyEntity(Entities[i]);
+                        if (enemy.SpeedScale >= 1.0f)
+                            enemy.SpeedScale *= 0.85f; //受到攻击后减速
                         //碰撞相交的新的AABB盒子,其中心点就是爆炸点
-                        var box = (AABB)ECSPhysics.GetEncompassingAABB(collider.MinMaxBox, otherCollider.MinMaxBox);
+//                        var box = (AABB)ECSPhysics.GetEncompassingAABB(collider.MinMaxBox, otherCollider.MinMaxBox);
                         Entity e = EntityCommandBuffer.CreateEntity(ECSWorld.BlastEntityArchetype);
                         EntityCommandBuffer.SetComponent(e, new Blast
                         {

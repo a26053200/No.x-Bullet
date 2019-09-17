@@ -15,8 +15,11 @@ namespace Game
     {
         public static ECSWorld Instance;
 
+        [HideInInspector]
         public int score;
-        
+
+        public bool isStart { get; private set; }
+
         [SerializeField]
         public Mesh meshBullet;
         
@@ -45,11 +48,14 @@ namespace Game
 
         public void Launch()
         {
+            if (Instance)
+                throw new Exception("This class can only create one instance");
             if (Camera.main != null)
                 _cameraView = Camera.main.GetComponent<CameraView>();
             if (_cameraView)
                 cornerRect = _cameraView.rect;
             Instance = this;
+            
             _entityManager = Unity.Entities.World.Active.EntityManager;
             _airplaneEntityArchetype = _entityManager.CreateArchetype(
                 typeof(MoveSpeed),
@@ -94,6 +100,10 @@ namespace Game
 //            _entityManager.AddComponent<PlayerInput>(pointLightEntity.Entity);
         }
 
+        public void StartGame()
+        {
+            isStart = true;
+        }
         public void CreateAirplane(AirplaneInfo info)
         {
             //实体的本地数组
@@ -144,7 +154,8 @@ namespace Game
                 _entityManager.SetComponentData(entity, new Enemy
                 {
                     BornTime = Time.time,
-                    LifeTime = info.LifeTime
+                    LifeTime = info.LifeTime,
+                    SpeedScale = 1
                 });
             }
         }
