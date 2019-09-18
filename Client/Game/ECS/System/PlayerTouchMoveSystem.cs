@@ -14,9 +14,9 @@ namespace Game
         public float slideMagnitudeX = 0.0f;    
         public float slideMagnitudeY = 0.0f;
 
-        private float2 movement;
+        private Vector3 movement;
         
-        private Vector2 touchStartPos = Vector2.zero;
+        private Vector3 touchStartPos = Vector3.zero;
             
         protected override void OnUpdate()
         {
@@ -27,8 +27,14 @@ namespace Game
             {
                 var movePos = Input.mousePosition;
                 movement = movePos - touchStartPos;
+                touchStartPos = Input.mousePosition;
             }
-            if (Input.GetMouseButton(0) || Input.touchCount == 1)
+            
+            Entities.ForEach((ref PlayerInput input) =>
+            {
+                input.movement = movement;
+            });
+            if (Input.touchCount == 1)
             {
                 Touch touch = Input.GetTouch(0);    
                 if(touch.phase == TouchPhase.Began)    
