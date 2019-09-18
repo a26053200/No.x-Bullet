@@ -19,12 +19,14 @@ function ViewManager:Ctor()
     local prefab = Res.LoadPrefab("Prefabs/UI/Common/UICanvas.prefab")
     self.uiCanvas = Instantiate(prefab)
     self.uiCanvas.name = "[UICanvas]"
-    dontDestroyOnLoad(self.uiCanvas)
+    self.uiCamera = self.uiCanvas:FindChild("UICamera"):GetComponent(typeof(UnityEngine.Camera))
+    self.uiCanvas = self.uiCanvas:GetComponent(typeof(UnityEngine.Canvas))
+    dontDestroyOnLoad(self.uiCanvas.gameObject)
 end
 
 ---@return UnityEngine.Transform
 function ViewManager:GetUILayer(layer)
-    return self.uiCanvas:FindChild(layer).transform
+    return self.uiCanvas.gameObject:FindChild(layer).transform
 end
 ---@param scene Game.Modules.World.Scenes.BaseScene
 function ViewManager:SetScene(scene)
@@ -101,6 +103,7 @@ function ViewManager:CreateView(viewInfo,go)
     if viewInfo ~= ViewConfig.World then
         mdr.scene = self.scene
         mdr.uiCanvas = self.uiCanvas
+        mdr.uiCamera =  self.uiCamera
         go.transform:SetParent(self:GetUILayer(mdr.layer))
     else
         dontDestroyOnLoad(go)

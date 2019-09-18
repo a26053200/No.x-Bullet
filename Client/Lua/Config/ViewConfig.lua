@@ -23,3 +23,4 @@ ViewConfig.HongJianConsole = {name = "HongJianConsole",prefab = "Prefabs/UI/Hong
 ViewConfig.RoomDesk = {name = "RoomDesk",prefab = "Prefabs/UI/Room/RoomDesk.prefab",}
 ViewConfig.Battle = {name = "Battle",prefab = "Prefabs/UI/Battle/Battle.prefab",}
 ViewConfig.BattleInfo = {name = "BattleInfo",prefab = "Prefabs/UI/Battle/BattleInfo.prefab",}
+ViewConfig.Joystick = {name = "Joystick",prefab = "Prefabs/UI/Common/Joystick.prefab",}

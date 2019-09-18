@@ -7,15 +7,18 @@
 local NetworkListener = require("Betel.Net.NetworkListener")
 local LuaMonoBehaviour = require('Betel.LuaMonoBehaviour')
 ---@class Game.Core.Ioc.BaseMediator : Betel.LuaMonoBehaviour
----@field public gameObject UnityEngine.GameObject
----@field public layer string 该模块所在UI层级
----@field public scene Game.Modules.World.Scenes.BaseScene
+---@field gameObject UnityEngine.GameObject
+---@field layer string 该模块所在UI层级
+---@field scene Game.Modules.World.Scenes.BaseScene
+---@field uiCanvas UnityEngine.Canvas
+---@field uiCamera UnityEngine.Camera
 local BaseMediator = class("BaseMediator",LuaMonoBehaviour)
 
 function BaseMediator:Ctor()
     BaseMediator.super.Ctor(self)
     self.layer = UILayer.depth --默认在深度排序层级
     self.listener = NetworkListener.New()
+    self.clickEventMap = {}
     self.removeCallback = nil
 end
 
@@ -59,7 +62,22 @@ function BaseMediator:OnAutoRemoveEvent()
         LuaHelper.RemoveButtonClick(buttons[i].gameObject)
     end
 end
-function BaseMediator:RegisterClick(go, clickFun)
+
+function BaseMediator:AddClickEventListener(go, clickFun)
+    if not self.clickEventMap[go] then
+        local func = LuaHelper.AddObjectClickEvent(go,handler(self,clickFun))
+        self.clickEventMap[go] = func
+    end
+end
+
+function BaseMediator:AddObjectEventListener(listener, go, func)
+    if not self.clickEventMap[go] then
+        listener(go, func)
+        self.clickEventMap[go] = func
+    end
+end
+
+function BaseMediator:RegisterButtonClick(go, clickFun)
     LuaHelper.AddButtonClick(go,handler(self,clickFun))
 end
 
@@ -76,6 +94,10 @@ function BaseMediator:OnDestroy()
         self.removeCallback(self)
     end
     self.viewInfo.status = ViewStatus.Unloaded
+
+    for go, func in pairs(self.clickEventMap) do
+        LuaHelper.RemoveObjectEvent(go, func)
+    end
 end
 
 function BaseMediator:OnRemove()

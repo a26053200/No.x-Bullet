@@ -32,6 +32,7 @@ function BattleMdr:OnInit()
     self:CreateHeroAirplane()
 
     vmgr:LoadView(ViewConfig.BattleInfo)
+    vmgr:LoadView(ViewConfig.Joystick)
 end
 
 function BattleMdr:CreateHeroAirplane()
