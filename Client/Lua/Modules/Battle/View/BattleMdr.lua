@@ -81,6 +81,8 @@ function BattleMdr:CreateEnemyAirplane()
     airplaneInfo.MaxHp = math.random(20, 100)
     airplaneInfo.BoxSize = Vector3.New(1, 0.1, 1) * scale
     airplaneInfo.Damage = 10
+    airplaneInfo.ShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On
+    airplaneInfo.ReceiveShadows = false
     self.ecsWorld:CreateAirplane(airplaneInfo)
 end
 

@@ -6,40 +6,73 @@
 
 local BaseMediator = require("Game.Core.Ioc.BaseMediator")
 ---@class Game.Modules.Joystick.View.JoystickMdr : Game.Core.Ioc.BaseMediator
+---@field lastStickPos UnityEngine.Vector3
 local JoystickMdr = class("JoystickMdr",BaseMediator)
 
 function JoystickMdr:OnInit()
     self.hotArea = self.gameObject:FindChild("HotArea")
-    self.pan = self.gameObject:FindChild("Pan")
-    self.stick = self.gameObject:FindChild("Stick")
+    self.canvasGroup = self.hotArea:GetCanvasGroup("HotArea")
+    self.pan = self.gameObject:FindChild("HotArea/Pan")
+    self.stick = self.gameObject:FindChild("HotArea/Stick")
 
+    self.hotAreaRect = self.hotArea:GetRect()
     self.panRect = self.pan:GetRect()
     self.stickRect = self.stick:GetRect()
+
+    self.radius = self.panRect.sizeDelta.x / 2
+
+    self.canvasGroup.alpha = 0
+
 end
 
 function JoystickMdr:RegisterListeners()
     self:AddObjectEventListener(LuaHelper.AddObjectPointerDown, self.hotArea,handler(self, self.OnHotAreaDown))
-    self:AddObjectEventListener(LuaHelper.AddObjectDrag, self.hotArea,handler(self, self.OnHotAreaDrag))
-    self:AddObjectEventListener(LuaHelper.AddObjectEndDrag, self.hotArea,handler(self, self.OnHotAreaDragEnd))
-    self:AddObjectEventListener(LuaHelper.AddObjectPointerUp, self.hotArea,handler(self, self.OnHotAreaDragEnd))
+    self:AddObjectEventListener(LuaHelper.AddObjectBeginDrag,   self.hotArea,handler(self, self.OnHotAreaBeginDrag))
+    self:AddObjectEventListener(LuaHelper.AddObjectDrag,        self.hotArea,handler(self, self.OnHotAreaDrag))
+    self:AddObjectEventListener(LuaHelper.AddObjectEndDrag,     self.hotArea,handler(self, self.OnHotAreaDragEnd))
+    self:AddObjectEventListener(LuaHelper.AddObjectPointerUp,   self.hotArea,handler(self, self.OnHotAreaDragEnd))
 end
 
 ---@param eventData UnityEngine.EventSystems.PointerEventData
 function JoystickMdr:OnHotAreaDown(eventData)
-    self:OnHotAreaDrag(eventData)
+    local position = Tools.ScreenToUICanvasPoint(eventData.position, self.uiCanvas, self.hotAreaRect)
+    self.panRect.position = position
+    self.stickRect.position = position
+    self.lastStickPos = position
+    self.canvasGroup:DOPause()
+    self.canvasGroup:DOFade(1,0.2)
 end
 
 ---@param eventData UnityEngine.EventSystems.PointerEventData
-function JoystickMdr:OnHotAreaDrag(eventData)
-    local position = eventData.pointerCurrentRaycast.worldPosition
-    position = Tools.WorldToUILocalPosition( self.uiCamera, position)
-    self.panRect.position = position
+function JoystickMdr:OnHotAreaBeginDrag(eventData)
+    local position = Tools.ScreenToUICanvasPoint(eventData.position, self.uiCanvas, self.hotAreaRect)
     self.stickRect.position = position
 end
 
 ---@param eventData UnityEngine.EventSystems.PointerEventData
-function JoystickMdr:OnHotAreaDragEnd(eventData)
+function JoystickMdr:OnHotAreaDrag(eventData)
+    local position = Tools.ScreenToUICanvasPoint(eventData.position, self.uiCanvas, self.hotAreaRect)
+    self.stickRect.position = position
+    local dir = self.stickRect.anchoredPosition - self.panRect.anchoredPosition;
+    local distance = Vector2.Distance(self.stickRect.anchoredPosition, self.panRect.anchoredPosition)
+    print("distance " .. distance .. " radius " .. self.radius)
+    if distance > self.radius then
+        self.stickRect.anchoredPosition = self.panRect.anchoredPosition + dir.normalized * self.radius
+    end
 
+    local p1 = self.stickRect.anchoredPosition
+    local p0 = self.panRect.anchoredPosition
+    Game.ECSWorld.Instance.Horizontal = (p1.x - p0.x) / self.radius
+    Game.ECSWorld.Instance.Vertical = (p1.y - p0.y) / self.radius
+end
+
+---@param eventData UnityEngine.EventSystems.PointerEventData
+function JoystickMdr:OnHotAreaDragEnd(eventData)
+    self.canvasGroup:DOFade(0,0.2)
+    self.stick.transform:DOMove(self.lastStickPos,0.2)
+
+    Game.ECSWorld.Instance.Horizontal = 0
+    Game.ECSWorld.Instance.Vertical = 0
 end
 
 return JoystickMdr

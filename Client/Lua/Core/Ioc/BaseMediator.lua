@@ -71,9 +71,9 @@ function BaseMediator:AddClickEventListener(go, clickFun)
 end
 
 function BaseMediator:AddObjectEventListener(listener, go, func)
-    if not self.clickEventMap[go] then
+    if not self.clickEventMap[func] then
         listener(go, func)
-        self.clickEventMap[go] = func
+        self.clickEventMap[func] = {go,func}
     end
 end
 
@@ -95,8 +95,8 @@ function BaseMediator:OnDestroy()
     end
     self.viewInfo.status = ViewStatus.Unloaded
 
-    for go, func in pairs(self.clickEventMap) do
-        LuaHelper.RemoveObjectEvent(go, func)
+    for _, map in pairs(self.clickEventMap) do
+        LuaHelper.RemoveObjectEvent(map[1], map[2])
     end
 end
 
