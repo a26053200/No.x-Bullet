@@ -10,9 +10,9 @@ namespace Game
         
         public readonly Material Material;
         
-        public readonly ShadowCastingMode ShadowCastingMode = ShadowCastingMode.Off;
+        public ShadowCastingMode ShadowCastingMode = ShadowCastingMode.Off;
         
-        public readonly bool ReceiveShadows = false;
+        public bool ReceiveShadows = false;
 
         public readonly int Layer;
         

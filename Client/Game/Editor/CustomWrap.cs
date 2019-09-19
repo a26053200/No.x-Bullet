@@ -5,6 +5,7 @@ using ECS;
 using BindType = ToLuaMenu.BindType;
 using Framework;
 using Game;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 /// <summary>
 /// <para>Class Introduce</para>
@@ -41,6 +42,11 @@ public static class CustomWrap
 
         _GT(typeof(AnimatorStateInfo)),
         _GT(typeof(TextMesh)),
+        //================
+        // Packages
+        //================
+        _GT(typeof(ShadowCastingMode)),
+        
         //================
         // UnityEngine.UI
         //================
