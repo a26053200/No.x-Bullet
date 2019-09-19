@@ -29,6 +29,7 @@ public static class CustomWrap
         _GT(typeof(LayerMask)),
         _GT(typeof(Touch)),
         _GT(typeof(AudioRolloffMode)),
+        _GT(typeof(RectTransformUtility)),
         _GT(typeof(UnityEngine.SceneManagement.SceneManager)),
         _GT(typeof(UnityEngine.SceneManagement.Scene)),
         _GT(typeof(UnityEngine.EventSystems.PointerEventData)),

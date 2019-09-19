@@ -20,6 +20,10 @@ namespace Game
 
         public bool isStart { get; private set; }
 
+        public float Horizontal;
+        
+        public float Vertical;
+        
         [SerializeField]
         public Mesh meshBullet;
         

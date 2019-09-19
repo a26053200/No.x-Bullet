@@ -12,7 +12,7 @@ namespace Game
     {
         protected override void OnCreate()
         {
-            Enabled = false;
+            //Enabled = false;
         }
 
         [BurstCompile]
@@ -34,11 +34,10 @@ namespace Game
             private float3 CalPos(PlayerInput input, float3 oldPos, float moveSpeed, float2 playerSize)
             {
                 var pos = oldPos;
-                pos += input.movement * DeltaTime * moveSpeed;
-//                pos += new float3(
-//                    input.Horizontal * DeltaTime * moveSpeed,
-//                    0,
-//                    input.Vertical * DeltaTime * moveSpeed);
+                pos += new float3(
+                    input.Horizontal * DeltaTime * moveSpeed,
+                    0,
+                    input.Vertical * DeltaTime * moveSpeed);
                 if (pos.x + playerSize.x > Rect.x + Rect.width)
                     pos.x = Rect.x + Rect.width - playerSize.x;
                 else if (pos.x - playerSize.x < Rect.x)
