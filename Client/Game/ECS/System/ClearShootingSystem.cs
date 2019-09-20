@@ -8,46 +8,40 @@ namespace Game
 {
     public class ClearShootingSystem : JobComponentSystem
     {
-        private EndSimulationEntityCommandBufferSystem _barrier;
-        private EntityCommandBuffer _buffer;
 
         protected override void OnCreate()
         {
-            _barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 //            Enabled = false;
         }
-        //[BurstCompile]
-        private struct ClearShootingJob : IJobForEachWithEntity<Airplane, Firing>
+        [BurstCompile]
+        private struct ClearShootingJob : IJobForEachWithEntity<Weapon>
         {
+            public float ShootIntervalTime;
             public float CurrentTime;
-            [ReadOnly]
-            public EntityCommandBuffer EntityCommandBuffer;
-
-            public void Execute(Entity entity, int index,ref Airplane airplane, ref Firing firing)
+            public void Execute(Entity entity, int index,ref Weapon weapon)
             {
-                if (CurrentTime - firing.FireStartTime > airplane.ShootIntervalTime)
+                if (weapon.FireStartTime > 0 && CurrentTime - weapon.FireStartTime > ShootIntervalTime)
                 {
-                    EntityCommandBuffer.RemoveComponent<Firing>(entity);
+                    weapon.FireStartTime = 0;
+                    weapon.IsFired = false;
                 }
             }
         }
         
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            _buffer = _barrier.CreateCommandBuffer();
+            if (!ECSWorld.Instance)
+                return inputDeps;
+            var shootIntervalTime = 1f / ECSWorld.Instance.ShootSpeed;
+            //Debug.Log("shootIntervalTime " + shootIntervalTime);
             var job = new ClearShootingJob()
             {
+                ShootIntervalTime = shootIntervalTime,
                 CurrentTime = Time.time,
-                EntityCommandBuffer = _buffer,
             };
-            inputDeps = job.Schedule(this, inputDeps);
-            _barrier.AddJobHandleForProducer(inputDeps);
-            return inputDeps;
-        }
-
-        protected override void OnDestroyManager()
-        {
-            //_buffer.Dispose();
+            var jobHandle = job.Schedule(this, inputDeps);
+            jobHandle.Complete();
+            return jobHandle;
         }
     }
 }

@@ -21,10 +21,10 @@ namespace Game
         protected override void OnCreate()
         {
             _query = GetEntityQuery(
-                ComponentType.ReadWrite<Player>(),
+                ComponentType.ReadWrite<Weapon>(),
                 ComponentType.Exclude<Firing>());
             _barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-            //Enabled = false;
+            Enabled = false;
         }
 
 

@@ -10,7 +10,7 @@ using UnityEngine.Rendering;
 
 namespace Game
 {
-    public class AABBColliderSystem : JobComponentSystem
+    public class BulletColliderSystem : JobComponentSystem
     {
         private EntityQuery _query;
         private EndSimulationEntityCommandBufferSystem _barrier;
@@ -19,8 +19,8 @@ namespace Game
         {
             _barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
             _query = GetEntityQuery(ComponentType.ReadWrite<AABBCollider>(),
-                ComponentType.ReadWrite<Bullet>(),
-                ComponentType.ReadWrite<Translation>());
+                //ComponentType.ReadWrite<Translation>(),
+                ComponentType.ReadWrite<Bullet>());
         }
 
         //[BurstCompile]
@@ -28,7 +28,7 @@ namespace Game
         {
             [ReadOnly] public NativeArray<AABBCollider> Colliders;
             [ReadOnly] public NativeArray<Bullet> Bullets;
-            [ReadOnly] public NativeArray<Translation> BulletTranslations;
+            //[ReadOnly] public NativeArray<Translation> BulletTranslations;
             [ReadOnly] public NativeArray<Entity> Entities;
             [ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
 
@@ -64,12 +64,12 @@ namespace Game
             var entities = _query.ToEntityArray(Allocator.TempJob);
             var colliders = _query.ToComponentDataArray<AABBCollider>(Allocator.TempJob);
             var bullets = _query.ToComponentDataArray<Bullet>(Allocator.TempJob);
-            var translations = _query.ToComponentDataArray<Translation>(Allocator.TempJob);
+            //var translations = _query.ToComponentDataArray<Translation>(Allocator.TempJob);
             var job = new BulletColliderJob()
             {
                 Colliders = colliders,
                 Bullets = bullets,
-                BulletTranslations = translations,
+                //BulletTranslations = translations,
                 Entities = entities,        
                 EntityCommandBuffer = _barrier.CreateCommandBuffer(),
             };
@@ -78,7 +78,7 @@ namespace Game
             colliders.Dispose();
             entities.Dispose();
             bullets.Dispose();
-            translations.Dispose();
+            //translations.Dispose();
             return jobHandle;
         }
     }

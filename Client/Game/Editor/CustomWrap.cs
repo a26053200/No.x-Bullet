@@ -114,6 +114,7 @@ public static class CustomWrap
         //================
         _GT(typeof(ECSWorld)),
         _GT(typeof(AirplaneInfo)),
+        _GT(typeof(WeaponInfo)),
     };
 }
 

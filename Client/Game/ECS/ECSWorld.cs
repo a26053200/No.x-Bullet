@@ -18,6 +18,7 @@ namespace Game
         [HideInInspector]
         public int score;
 
+        [Range(1f, 60f)] public float ShootSpeed = 0;
         public bool isStart { get; private set; }
 
         public float Horizontal;
@@ -49,6 +50,8 @@ namespace Game
         private EntityManager _entityManager;
 
         private EntityArchetype _airplaneEntityArchetype;
+
+        private EntityArchetype _weaponEntityArchetype;
 
         public void Launch()
         {
@@ -98,19 +101,20 @@ namespace Game
                 typeof(Blast)
             );
 
-//            _entityManager.AddComponent<FireLight>(pointLightEntity.Entity);
-//            _entityManager.AddComponent<MoveSpeed>(pointLightEntity.Entity);
-//            _entityManager.SetComponentData(pointLightEntity.Entity, new MoveSpeed() {Speed = speed});
-//            _entityManager.AddComponent<PlayerInput>(pointLightEntity.Entity);
+            _weaponEntityArchetype = _entityManager.CreateArchetype(
+                typeof(Translation),
+                typeof(Weapon)
+            );
         }
 
         public void StartGame()
         {
             isStart = true;
         }
+        
+        
         public void CreateAirplane(AirplaneInfo info)
         {
-            //实体的本地数组
             Entity entity = _entityManager.CreateEntity(_airplaneEntityArchetype);
             _entityManager.SetComponentData(entity, new MoveSpeed() {Speed = info.MoveSpeed});
             _entityManager.SetComponentData(entity, new Translation()
@@ -163,6 +167,21 @@ namespace Game
                     SpeedScale = 1
                 });
             }
+        }
+
+        public void CreateWeapon(WeaponInfo info)
+        {
+            Entity entity = _entityManager.CreateEntity(_weaponEntityArchetype);
+            _entityManager.SetComponentData(entity, new Weapon
+            {
+                Damage = info.Damage,
+                ShootOffset = info.ShootOffset,
+                BulletScale = info.BulletScale,
+                BulletSpeed = info.BulletSpeed,
+                BulletEuler = info.BulletEuler,
+                BulletGap = info.BulletGap,
+                BulletBlastDuration = info.BulletBlastDuration,
+            });
         }
     }
 }

@@ -4,9 +4,9 @@ namespace Game
 {
     public class WeaponInfo
     {
-        public readonly Mesh Mesh;
-        
-        public readonly Material Material;
+        public float Damage;
+
+        public float ShootOffset;
         
         public float BulletSpeed = 6f;
 

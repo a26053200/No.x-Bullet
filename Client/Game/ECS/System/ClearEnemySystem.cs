@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
@@ -16,7 +17,7 @@ namespace Game
             _barrier = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 //            Enabled = false;
         }
-        
+        //[BurstCompile]
         private struct ClearEnemyJob : IJobForEachWithEntity<Enemy, Translation>
         {
             public float CurrentTime;
@@ -40,9 +41,9 @@ namespace Game
                 CurrentTime = Time.time,
                 EntityCommandBuffer = _buffer,
             };
-            inputDeps = job.Schedule(this, inputDeps);
-            _barrier.AddJobHandleForProducer(inputDeps);
-            return inputDeps;
+            var jobHandle = job.Schedule(this, inputDeps);
+            jobHandle.Complete();
+            return jobHandle;
         }
     }
 }

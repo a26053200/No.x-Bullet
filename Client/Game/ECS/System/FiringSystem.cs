@@ -19,49 +19,48 @@ namespace Game
             //Enabled = false;
         }
         
-        private struct FiringJob : IJobForEachWithEntity_ECCCC<Airplane, Rotation, Firing, Translation>
+        private struct FiringJob : IJobForEachWithEntity_ECC<Weapon, Translation>
         {
             public float FireStartTime;
             [ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
 
-            public void Execute(Entity entity, int index,[ReadOnly] ref Airplane airplane, [ReadOnly] ref Rotation rotation, [ReadOnly] ref Firing firing,
-                ref Translation translation)
+            public void Execute(Entity entity, int index, [ReadOnly] ref Weapon weapon,ref Translation translation)
             {
-                if (!firing.IsFired)
+                if (!weapon.IsFired)
                 {
-                    CreateBullet(airplane, FireStartTime, translation, EntityCommandBuffer, -airplane.BulletGap);
-                    CreateBullet(airplane, FireStartTime, translation, EntityCommandBuffer, +airplane.BulletGap);
-                    firing.IsFired = true;
+                    weapon.FireStartTime = FireStartTime;
+                    CreateBullet(weapon, FireStartTime, translation, EntityCommandBuffer, weapon.BulletGap);
+                    weapon.IsFired = true;
                 }
             }
 
-            private void CreateBullet(Airplane airplane,float fireStartTime, Translation translation, EntityCommandBuffer buffer, float offsetX)
+            private void CreateBullet(Weapon weapon,float fireStartTime, Translation translation, EntityCommandBuffer buffer, float offsetX)
             {
                 Entity entity = buffer.CreateEntity(ECSWorld.BulletEntityArchetype);
                 float radian = math.PI / 180f;
                 buffer.SetComponent(entity, new Rotation
                 {
-                    Value = quaternion.Euler(airplane.BulletEuler * radian, math.RotationOrder.Default)
+                    Value = quaternion.Euler(weapon.BulletEuler * radian, math.RotationOrder.Default)
                 });
                 buffer.SetComponent(entity, new Bullet
                 {
                     StartTime = fireStartTime,
                     BoxSize = new float3(0.1f,0.1f,0.1f),
-                    Damage = airplane.Damage,
-                    BlastDuration = airplane.BulletBlastDuration
+                    Damage = weapon.Damage,
+                    BlastDuration = weapon.BulletBlastDuration
                 });
                 buffer.SetComponent(entity, new MoveSpeed
                 {
-                    Speed = airplane.BulletSpeed
+                    Speed = weapon.BulletSpeed
                 });
                 buffer.SetComponent(entity, new NonUniformScale
                 {
-                    Value = airplane.BulletScale
+                    Value = weapon.BulletScale
                 });
                 var pos = translation.Value;
                 buffer.SetComponent(entity, new Translation
                 {
-                    Value = new float3(pos.x + offsetX, pos.y, pos.z + airplane.ShootOffset),
+                    Value = new float3(pos.x + offsetX, pos.y, pos.z + weapon.ShootOffset),
                 });
                 buffer.SetSharedComponent(entity, new RenderMesh
                 {
@@ -75,12 +74,18 @@ namespace Game
         
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            var job = new FiringJob()
+            if (ECSWorld.Instance && ECSWorld.Instance.isStart)
             {
-                FireStartTime = Time.time,
-                EntityCommandBuffer = _barrier.CreateCommandBuffer()
-            };
-            return job.Schedule(this, inputDeps);
+                var job = new FiringJob()
+                {
+                    FireStartTime = Time.time,
+                    EntityCommandBuffer = _barrier.CreateCommandBuffer()
+                };
+                var jobHandle = job.Schedule(this, inputDeps);
+                jobHandle.Complete();
+                return jobHandle;
+            }else
+                return inputDeps;
         }
     }
 }

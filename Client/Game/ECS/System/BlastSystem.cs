@@ -23,7 +23,7 @@ namespace Game
             public float CurrentTime;
             [ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
             
-            public void Execute(Entity entity, int index, ref Blast blast)
+            public void Execute([ReadOnly] Entity entity, int index, ref Blast blast)
             {
                 if (blast.StartTime <= 0)
                 {

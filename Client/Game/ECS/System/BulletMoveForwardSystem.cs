@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class MoveForwardSystem : JobComponentSystem
+    public class BulletMoveForwardSystem : JobComponentSystem
     {
         private EndSimulationEntityCommandBufferSystem _barrier;
 
@@ -28,8 +28,8 @@ namespace Game
             public void Execute(Entity entity, int index, ref Translation translation, ref MoveSpeed moveSpeed, ref Rotation rotation, ref Bullet bullet)
             {
                 //Debug.Log(localToWorld.Forward);
-                //var dir = math.forward(rotation.Value);
-                translation.Value.xyz += DeltaTime * moveSpeed.Speed * new float3(0,0,1);
+                var dir = math.forward(rotation.Value);
+                translation.Value.xyz += DeltaTime * moveSpeed.Speed * dir;
                 if (CurrentTime - bullet.StartTime > 3f)
                 {
                     EntityCommandBuffer.DestroyEntity(entity);
@@ -45,9 +45,9 @@ namespace Game
                 DeltaTime = Time.deltaTime,
                 EntityCommandBuffer = _barrier.CreateCommandBuffer(),
             };
-            inputDeps = job.Schedule(this, inputDeps);
-            _barrier.AddJobHandleForProducer(inputDeps);
-            return inputDeps;
+            var jobHandle = job.Schedule(this, inputDeps);
+            jobHandle.Complete();
+            return jobHandle;
         }
 //        protected override void OnCreateManager()
 //        {
