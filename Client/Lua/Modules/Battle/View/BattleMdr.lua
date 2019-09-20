@@ -48,8 +48,9 @@ function BattleMdr:CreateHeroAirplane()
     airplaneInfo.Size = size
     airplaneInfo.Scale = Vector3.New(0.5, 0.5, 0.5)
     airplaneInfo.BulletSpeed = 30
-    airplaneInfo.BulletScale = Vector3.New(0.5, 1, 1)
+    airplaneInfo.BulletScale = Vector3.New(0.3, 1, 1)
     airplaneInfo.BulletEuler = Vector3.New(90, 180, 0)
+    airplaneInfo.BulletGap = 0.2
     airplaneInfo.BulletBlastDuration = 0.2
     airplaneInfo.ShootOffset = 0.7
     airplaneInfo.MaxHp = math.random(50, 100)
