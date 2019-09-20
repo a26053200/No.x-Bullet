@@ -45,18 +45,33 @@ function BattleMdr:CreateHeroAirplane()
             0,
             self.viewPortRect.y - self.viewPortRect.height + size.y
     )
+    airplaneInfo.ShootIntervalTime = 10 * FRAME_TIME
     airplaneInfo.Size = size
     airplaneInfo.Scale = Vector3.New(0.5, 0.5, 0.5)
-    airplaneInfo.BulletSpeed = 30
-    airplaneInfo.BulletScale = Vector3.New(0.3, 1, 1)
-    airplaneInfo.BulletEuler = Vector3.New(90, 180, 0)
-    airplaneInfo.BulletGap = 0.2
-    airplaneInfo.BulletBlastDuration = 0.2
-    airplaneInfo.ShootOffset = 0.7
     airplaneInfo.MaxHp = math.random(50, 100)
     airplaneInfo.BoxSize = Vector3.New(0.5, 0.1, 0.5)
-    airplaneInfo.Damage = math.random(10, 30)
     self.ecsWorld:CreateAirplane(airplaneInfo)
+
+    local weaponInfo = Game.WeaponInfo.New()
+    weaponInfo.Damage = math.random(10, 30)
+    weaponInfo.ShootOffset = 0.7
+    weaponInfo.BulletSpeed = 30
+    weaponInfo.BulletScale = Vector3.New(0.3, 1, 1)
+    weaponInfo.BulletEuler = Vector3.New(90, 180, 0)
+    weaponInfo.BulletGap = 0.1
+    weaponInfo.BulletBlastDuration = 0.2
+    self.ecsWorld:CreateWeapon(weaponInfo)
+
+    weaponInfo = Game.WeaponInfo.New()
+    weaponInfo.Damage = math.random(10, 30)
+    weaponInfo.ShootOffset = 0.7
+    weaponInfo.BulletSpeed = 30
+    weaponInfo.BulletScale = Vector3.New(0.3, 1, 1)
+    weaponInfo.BulletEuler = Vector3.New(90, 135, 0)
+    weaponInfo.BulletGap = 0.3
+    weaponInfo.BulletBlastDuration = 0.2
+    self.ecsWorld:CreateWeapon(weaponInfo)
+
 end
 
 function BattleMdr:CreateEnemyAirplane()
