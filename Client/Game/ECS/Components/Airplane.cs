@@ -22,6 +22,8 @@ namespace Game
 
         public float3 BulletScale;
 
+        public float BulletGap;
+
         public float2 PlayerSize;
 
         public float3 BoxSize;

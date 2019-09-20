@@ -46,6 +46,8 @@ namespace Game
         public Vector3 BulletScale = Vector3.one;
         
         public Vector3 BulletEuler = new Vector3(90,180,0);
+
+        public float BulletGap;
         
         public AirplaneInfo(Mesh mesh, Material material, int layer)
         {

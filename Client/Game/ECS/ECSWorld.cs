@@ -138,6 +138,7 @@ namespace Game
                 BulletScale = info.BulletScale,
                 BulletSpeed = info.BulletSpeed,
                 BulletEuler = info.BulletEuler,
+                BulletGap = info.BulletGap,
                 BulletBlastDuration = info.BulletBlastDuration,
                 ShootIntervalTime = info.ShootIntervalTime,
                 ShootOffset = info.ShootOffset,

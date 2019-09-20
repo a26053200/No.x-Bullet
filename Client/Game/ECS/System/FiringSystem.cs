@@ -29,12 +29,13 @@ namespace Game
             {
                 if (!firing.IsFired)
                 {
-                    CreateBullet(airplane, FireStartTime, translation, EntityCommandBuffer);
+                    CreateBullet(airplane, FireStartTime, translation, EntityCommandBuffer, -airplane.BulletGap);
+                    CreateBullet(airplane, FireStartTime, translation, EntityCommandBuffer, +airplane.BulletGap);
                     firing.IsFired = true;
                 }
             }
 
-            private void CreateBullet(Airplane airplane,float fireStartTime, Translation translation, EntityCommandBuffer buffer)
+            private void CreateBullet(Airplane airplane,float fireStartTime, Translation translation, EntityCommandBuffer buffer, float offsetX)
             {
                 Entity entity = buffer.CreateEntity(ECSWorld.BulletEntityArchetype);
                 float radian = math.PI / 180f;
@@ -60,7 +61,7 @@ namespace Game
                 var pos = translation.Value;
                 buffer.SetComponent(entity, new Translation
                 {
-                    Value = new float3(pos.x, pos.y, pos.z + airplane.ShootOffset),
+                    Value = new float3(pos.x + offsetX, pos.y, pos.z + airplane.ShootOffset),
                 });
                 buffer.SetSharedComponent(entity, new RenderMesh
                 {
