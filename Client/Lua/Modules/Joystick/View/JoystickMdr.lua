@@ -75,4 +75,29 @@ function JoystickMdr:OnHotAreaDragEnd(eventData)
     Game.ECSWorld.Instance.Vertical = 0
 end
 
+function JoystickMdr:Update()
+    local LC = Input.GetKeyDown(UnityEngine.KeyCode.LeftControl)
+    local RC = Input.GetKeyDown(UnityEngine.KeyCode.RightControl)
+
+    --初始武器
+    if Input.GetKey(UnityEngine.KeyCode.Space) then
+        Game.ECSWorld.Instance.ActiveWeaponNo = 0
+        Game.ECSWorld.Instance.ActiveWeaponLevel = 0
+    end
+
+    if Input.GetKey(UnityEngine.KeyCode.F1) then
+        Game.ECSWorld.Instance.ActiveWeaponNo = 1
+        Game.ECSWorld.Instance.ActiveWeaponLevel = 1
+    end
+    if Input.GetKey(UnityEngine.KeyCode.Alpha1) then
+        Game.ECSWorld.Instance.ActiveWeaponLevel = 1
+    end
+    if Input.GetKey(UnityEngine.KeyCode.Alpha2) then
+        Game.ECSWorld.Instance.ActiveWeaponLevel = 2
+    end
+    if Input.GetKey(UnityEngine.KeyCode.Alpha3) then
+        Game.ECSWorld.Instance.ActiveWeaponLevel = 3
+    end
+end
+
 return JoystickMdr

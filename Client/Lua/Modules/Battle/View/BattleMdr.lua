@@ -4,10 +4,8 @@
 --- DateTime: 2019-05-18-23:22:49
 ---
 
-local BattleBehavior = require("Game.Modules.Battle.Behaviors.BattleBehavior")
-local BornArea = require("Game.Modules.Battle.Behaviors.BornWave")
-local AttachCamera = require("Game.Modules.Common.Camera.AttachCamera")
-local MainHero = require("Game.Modules.Battle.Items.MainHero")
+local WeaponNo1 = require("Game.Modules.Battle.Weapon.WeaponNo1")
+local WeaponDefault = require("Game.Modules.Battle.Weapon.WeaponDefault")
 local BaseMediator = require("Game.Core.Ioc.BaseMediator")
 
 ---@class Game.Modules.Battle.View.BattleMdr : Game.Core.Ioc.BaseMediator
@@ -52,26 +50,8 @@ function BattleMdr:CreateHeroAirplane()
     airplaneInfo.BoxSize = Vector3.New(0.5, 0.1, 0.5)
     self.ecsWorld:CreateAirplane(airplaneInfo)
 
-    local weaponInfo = Game.WeaponInfo.New()
-    weaponInfo.Damage = math.random(10, 30)
-    weaponInfo.ShootOffset = 0.7
-    weaponInfo.BulletSpeed = 30
-    weaponInfo.BulletScale = Vector3.New(0.3, 1, 1)
-    weaponInfo.BulletEuler = Vector3.New(90, 180, 0)
-    weaponInfo.BulletGap = 0.1
-    weaponInfo.BulletBlastDuration = 0.2
-    self.ecsWorld:CreateWeapon(weaponInfo)
-
-    weaponInfo = Game.WeaponInfo.New()
-    weaponInfo.Damage = math.random(10, 30)
-    weaponInfo.ShootOffset = 0.7
-    weaponInfo.BulletSpeed = 30
-    weaponInfo.BulletScale = Vector3.New(0.3, 1, 1)
-    weaponInfo.BulletEuler = Vector3.New(90, 135, 0)
-    weaponInfo.BulletGap = 0.3
-    weaponInfo.BulletBlastDuration = 0.2
-    self.ecsWorld:CreateWeapon(weaponInfo)
-
+    WeaponDefault.New(self.ecsWorld)
+    WeaponNo1.New(self.ecsWorld)
 end
 
 function BattleMdr:CreateEnemyAirplane()
