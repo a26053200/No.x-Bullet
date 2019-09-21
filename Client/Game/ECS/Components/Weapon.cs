@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Game
@@ -6,6 +7,10 @@ namespace Game
 
     public struct Weapon : IComponentData
     {
+        public int Level;
+
+        public int No;
+        
         public float FireStartTime;
         
         public bool IsFired;
@@ -18,9 +23,11 @@ namespace Game
 
         public float BulletBlastDuration;
         
-        public Vector3 BulletScale;
+        public float3 BulletScale;
         
-        public Vector3 BulletEuler;
+        public float3 BulletEuler;
+        
+        public float3 ShootDir;
 
         public float BulletGap;
     }

@@ -29,8 +29,11 @@ namespace Game
                 if (!weapon.IsFired)
                 {
                     weapon.FireStartTime = FireStartTime;
-                    CreateBullet(weapon, FireStartTime, translation, EntityCommandBuffer, weapon.BulletGap);
-                    weapon.IsFired = true;
+                    if ((weapon.No == 0 || weapon.No == ECSWorld.Instance.ActiveWeaponNo) && weapon.Level <= ECSWorld.Instance.ActiveWeaponLevel)
+                    {
+                        CreateBullet(weapon, FireStartTime, translation, EntityCommandBuffer, weapon.BulletGap);
+                        weapon.IsFired = true;
+                    }
                 }
             }
 
@@ -47,7 +50,8 @@ namespace Game
                     StartTime = fireStartTime,
                     BoxSize = new float3(0.1f,0.1f,0.1f),
                     Damage = weapon.Damage,
-                    BlastDuration = weapon.BulletBlastDuration
+                    BlastDuration = weapon.BulletBlastDuration,
+                    MoveDir = weapon.ShootDir
                 });
                 buffer.SetComponent(entity, new MoveSpeed
                 {

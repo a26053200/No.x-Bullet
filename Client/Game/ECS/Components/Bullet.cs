@@ -8,6 +8,7 @@ namespace Game
         public float Damage;
         public float StartTime;
         public float3 BoxSize;
+        public float3 MoveDir;
         public float BlastDuration;
     }
 }

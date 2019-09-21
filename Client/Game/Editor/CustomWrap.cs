@@ -5,6 +5,7 @@ using ECS;
 using BindType = ToLuaMenu.BindType;
 using Framework;
 using Game;
+using Unity.Entities;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 /// <summary>
@@ -112,9 +113,14 @@ public static class CustomWrap
         //================
         // ECS
         //================
+        //Core
+        _GT(typeof(Entity)),
+        //Game
+        _GT(typeof(ECSHelper)),
         _GT(typeof(ECSWorld)),
         _GT(typeof(AirplaneInfo)),
         _GT(typeof(WeaponInfo)),
+        _GT(typeof(Weapon)),
     };
 }
 

@@ -7,10 +7,10 @@ namespace Game
 #if UNITY_EDITOR
     public class DebugSystem : ComponentSystem
     {
-        protected override void OnCreateManager()
-        {
-            //Enabled = false;
-        }
+//        protected override void OnCreateManager()
+//        {
+//            Enabled = false;
+//        }
 
         protected override void OnUpdate()
         {

@@ -25,6 +25,10 @@ namespace Game
         
         public float Vertical;
         
+        public int ActiveWeaponNo;
+        
+        public int ActiveWeaponLevel;
+        
         [SerializeField]
         public Mesh meshBullet;
         
@@ -169,11 +173,13 @@ namespace Game
             }
         }
 
-        public void CreateWeapon(WeaponInfo info)
+        public Weapon CreateWeapon(WeaponInfo info)
         {
             Entity entity = _entityManager.CreateEntity(_weaponEntityArchetype);
-            _entityManager.SetComponentData(entity, new Weapon
+            var weapon = new Weapon
             {
+                No = info.No,
+                Level = info.Level,
                 Damage = info.Damage,
                 ShootOffset = info.ShootOffset,
                 BulletScale = info.BulletScale,
@@ -181,7 +187,10 @@ namespace Game
                 BulletEuler = info.BulletEuler,
                 BulletGap = info.BulletGap,
                 BulletBlastDuration = info.BulletBlastDuration,
-            });
+                ShootDir = info.ShootDir,
+            };
+            _entityManager.SetComponentData(entity, weapon);
+            return weapon;
         }
     }
 }

@@ -28,8 +28,9 @@ namespace Game
             public void Execute(Entity entity, int index, ref Translation translation, ref MoveSpeed moveSpeed, ref Rotation rotation, ref Bullet bullet)
             {
                 //Debug.Log(localToWorld.Forward);
-                var dir = math.forward(rotation.Value);
-                translation.Value.xyz += DeltaTime * moveSpeed.Speed * dir;
+                //var dir = math.forward(rotation.Value);
+                //dir = math.normalize(dir);
+                translation.Value.xyz += DeltaTime * moveSpeed.Speed * bullet.MoveDir;
                 if (CurrentTime - bullet.StartTime > 3f)
                 {
                     EntityCommandBuffer.DestroyEntity(entity);
