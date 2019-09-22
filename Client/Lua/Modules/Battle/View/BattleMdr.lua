@@ -26,7 +26,7 @@ function BattleMdr:OnInit()
     log(self.viewPortRect.x)
 
     self.startTime = Time.time
-    self.enemyBornIntervalTime = 3
+    self.enemyBornIntervalTime = 1
     self:CreateHeroAirplane()
 
     vmgr:LoadView(ViewConfig.BattleInfo)
@@ -50,8 +50,15 @@ function BattleMdr:CreateHeroAirplane()
     airplaneInfo.BoxSize = Vector3.New(0.5, 0.1, 0.5)
     self.ecsWorld:CreateAirplane(airplaneInfo)
 
-    WeaponDefault.New(self.ecsWorld)
-    WeaponNo1.New(self.ecsWorld)
+    self:RegisterWeapon("Game.Modules.Battle.Weapon.WeaponDefault")
+    self:RegisterWeapon("Game.Modules.Battle.Weapon.WeaponNo1")
+    self:RegisterWeapon("Game.Modules.Battle.Weapon.WeaponNo2")
+end
+
+--注册武器
+---@param weaponClass string
+function BattleMdr:RegisterWeapon(weaponClass)
+    require(weaponClass).New(self.ecsWorld)
 end
 
 function BattleMdr:CreateEnemyAirplane()

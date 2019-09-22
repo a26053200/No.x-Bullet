@@ -28,6 +28,8 @@ function LoginMdr:OnInit()
     self.gameObject:GetInputField("V/H2/InputField").text = self.password
     --local img = self.gameObject:GetImage("Image")
     --img.sprite = Res.LoadSprite("Atlas/HeadIcon/1.jpg")
+    
+    DelayCallback(0.5,Handler.New(self.On_Click_BtnLogin, self))
 end
 
 function LoginMdr:fetchInput()

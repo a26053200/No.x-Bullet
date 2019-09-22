@@ -9,6 +9,8 @@ local BaseMediator = require("Game.Core.Ioc.BaseMediator")
 ---@field lastStickPos UnityEngine.Vector3
 local JoystickMdr = class("JoystickMdr",BaseMediator)
 
+local ECSWorld = nil
+
 function JoystickMdr:OnInit()
     self.hotArea = self.gameObject:FindChild("HotArea")
     self.canvasGroup = self.hotArea:GetCanvasGroup("HotArea")
@@ -22,7 +24,7 @@ function JoystickMdr:OnInit()
     self.radius = self.panRect.sizeDelta.x / 2
 
     self.canvasGroup.alpha = 0
-
+    ECSWorld = Game.ECSWorld.Instance
 end
 
 function JoystickMdr:RegisterListeners()
@@ -33,6 +35,8 @@ function JoystickMdr:RegisterListeners()
     self:AddObjectEventListener(LuaHelper.AddObjectPointerUp,   self.hotArea,handler(self, self.OnHotAreaDragEnd))
 end
 
+
+
 ---@param eventData UnityEngine.EventSystems.PointerEventData
 function JoystickMdr:OnHotAreaDown(eventData)
     local position = Tools.ScreenToUICanvasPoint(eventData.position, self.uiCanvas, self.hotAreaRect)
@@ -41,6 +45,8 @@ function JoystickMdr:OnHotAreaDown(eventData)
     self.lastStickPos = position
     self.canvasGroup:DOPause()
     self.canvasGroup:DOFade(1,0.2)
+
+
 end
 
 ---@param eventData UnityEngine.EventSystems.PointerEventData
@@ -62,8 +68,8 @@ function JoystickMdr:OnHotAreaDrag(eventData)
 
     local p1 = self.stickRect.anchoredPosition
     local p0 = self.panRect.anchoredPosition
-    Game.ECSWorld.Instance.Horizontal = (p1.x - p0.x) / self.radius
-    Game.ECSWorld.Instance.Vertical = (p1.y - p0.y) / self.radius
+    ECSWorld.Horizontal = (p1.x - p0.x) / self.radius
+    ECSWorld.Vertical = (p1.y - p0.y) / self.radius
 end
 
 ---@param eventData UnityEngine.EventSystems.PointerEventData
@@ -71,8 +77,8 @@ function JoystickMdr:OnHotAreaDragEnd(eventData)
     self.canvasGroup:DOFade(0,0.2)
     self.stick.transform:DOMove(self.lastStickPos,0.2)
 
-    Game.ECSWorld.Instance.Horizontal = 0
-    Game.ECSWorld.Instance.Vertical = 0
+    ECSWorld.Horizontal = 0
+    ECSWorld.Vertical = 0
 end
 
 function JoystickMdr:Update()
@@ -81,22 +87,34 @@ function JoystickMdr:Update()
 
     --初始武器
     if Input.GetKey(UnityEngine.KeyCode.Space) then
-        Game.ECSWorld.Instance.ActiveWeaponNo = 0
-        Game.ECSWorld.Instance.ActiveWeaponLevel = 0
+        ECSWorld.ActiveWeaponNo = 0
+        ECSWorld.ActiveWeaponLevel = 0
     end
 
     if Input.GetKey(UnityEngine.KeyCode.F1) then
-        Game.ECSWorld.Instance.ActiveWeaponNo = 1
-        Game.ECSWorld.Instance.ActiveWeaponLevel = 1
+        ECSWorld.ActiveWeaponNo = 1
+        ECSWorld.ActiveWeaponLevel = 1
     end
+
+    if Input.GetKey(UnityEngine.KeyCode.F2) then
+        ECSWorld.ActiveWeaponNo = 2
+        ECSWorld.ActiveWeaponLevel = 1
+    end
+
     if Input.GetKey(UnityEngine.KeyCode.Alpha1) then
-        Game.ECSWorld.Instance.ActiveWeaponLevel = 1
+        ECSWorld.ActiveWeaponLevel = 1
     end
     if Input.GetKey(UnityEngine.KeyCode.Alpha2) then
-        Game.ECSWorld.Instance.ActiveWeaponLevel = 2
+        ECSWorld.ActiveWeaponLevel = 2
     end
     if Input.GetKey(UnityEngine.KeyCode.Alpha3) then
-        Game.ECSWorld.Instance.ActiveWeaponLevel = 3
+        ECSWorld.ActiveWeaponLevel = 3
+    end
+    if Input.GetKey(UnityEngine.KeyCode.Alpha4) then
+        ECSWorld.ActiveWeaponLevel = 4
+    end
+    if Input.GetKey(UnityEngine.KeyCode.Alpha5) then
+        ECSWorld.ActiveWeaponLevel = 5
     end
 end
 

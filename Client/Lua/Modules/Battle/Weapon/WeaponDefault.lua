@@ -33,11 +33,12 @@ end
 ---@return Game.WeaponInfo
 function WeaponDefault:CreateWeaponInfo()
     local weaponInfo = Game.WeaponInfo.New()
+    weaponInfo.SkinId = 0
     weaponInfo.No = 0
     weaponInfo.Level = 0
     weaponInfo.Damage = math.random(10, 30)
-    weaponInfo.ShootOffset = 0.7
-    weaponInfo.BulletSpeed = 30
+    weaponInfo.ShootOffset = Vector3.New(0, -0.01, 0.7)
+    weaponInfo.BulletSpeed = self.ecsWorld.BulletSpeed
     weaponInfo.BulletScale = Vector3.New(0.3, 1, 1)
     return weaponInfo
 end
