@@ -573,10 +573,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 0
   ShootSpeed: 10.4
+  BulletSpeed: 41.6
   Horizontal: 0
   Vertical: 0
-  meshBullet: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  materialBullet: {fileID: 2100000, guid: f9812fc423250554d8753220278b1b27, type: 2}
+  ActiveWeaponNo: 0
+  ActiveWeaponLevel: 0
+  meshBullets:
+  - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  materialBullets:
+  - {fileID: 2100000, guid: f9812fc423250554d8753220278b1b27, type: 2}
+  - {fileID: 2100000, guid: a025dab1c3abce54983a3a6d434ff861, type: 2}
+  - {fileID: 2100000, guid: 6c0c1eb96d7d2204a9083eacfe892112, type: 2}
+  - {fileID: 2100000, guid: b98d1d26cabc0d74dbed4ec50579a847, type: 2}
+  - {fileID: 2100000, guid: 0977d2a0c56add94a882d8c25e6ea686, type: 2}
   meshBlast: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   materialBlast: {fileID: 2100000, guid: e0228be7fe3963640a60f659b400f816, type: 2}
   pointLightEntity: {fileID: 899390069}

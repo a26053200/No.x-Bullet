@@ -19,6 +19,8 @@ namespace Game
         public int score;
 
         [Range(1f, 60f)] public float ShootSpeed = 0;
+        
+        [Range(1f, 100f)] public float BulletSpeed = 0;
         public bool isStart { get; private set; }
 
         public float Horizontal;
@@ -30,10 +32,10 @@ namespace Game
         public int ActiveWeaponLevel;
         
         [SerializeField]
-        public Mesh meshBullet;
+        public Mesh[] meshBullets;
         
         [SerializeField]
-        public Material materialBullet;
+        public Material[] materialBullets;
         
         [SerializeField]
         public Mesh meshBlast;
@@ -178,6 +180,7 @@ namespace Game
             Entity entity = _entityManager.CreateEntity(_weaponEntityArchetype);
             var weapon = new Weapon
             {
+                SkinId = info.SkinId,
                 No = info.No,
                 Level = info.Level,
                 Damage = info.Damage,
@@ -186,6 +189,7 @@ namespace Game
                 BulletSpeed = info.BulletSpeed,
                 BulletEuler = info.BulletEuler,
                 BulletGap = info.BulletGap,
+                BoxSize = info.BoxSize,
                 BulletBlastDuration = info.BulletBlastDuration,
                 ShootDir = info.ShootDir,
             };

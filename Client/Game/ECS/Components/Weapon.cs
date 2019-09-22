@@ -7,6 +7,8 @@ namespace Game
 
     public struct Weapon : IComponentData
     {
+        public int SkinId;
+        
         public int Level;
 
         public int No;
@@ -17,7 +19,7 @@ namespace Game
 
         public float Damage;
 
-        public float ShootOffset;
+        public float3 ShootOffset;
         
         public float BulletSpeed;
 
@@ -26,6 +28,8 @@ namespace Game
         public float3 BulletScale;
         
         public float3 BulletEuler;
+
+        public float3 BoxSize;
         
         public float3 ShootDir;
 

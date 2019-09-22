@@ -10,13 +10,16 @@ Shader "Game/TextureAnimation"
 		_Cols ("Cols Count", Int) = 5
 		_Rows ("Rows Count", Int) = 3
 		_Frame ("Per Frame Length", Float) = 0.5
+		
+		_Cutout("Cutout", Range(0, 1)) = 0.5
 	}
 
 	SubShader
 	{
-		Tags {"Queue" = "Transparent" "RenderType" = "Transparent"}
-		LOD 100
-            Blend SrcAlpha OneMinusSrcAlpha
+		Tags {"Queue" = "AlphaTest" "RenderType" = "TransparentCutout"}
+		//LOD 100
+        Blend SrcAlpha OneMinusSrcAlpha
+        //ColorMask RGB
 		Pass
 		{
 			CGPROGRAM
@@ -44,7 +47,8 @@ Shader "Game/TextureAnimation"
 
 			uint _Cols;
 			uint _Rows;
-
+            
+            float _Cutout;
 			float _Frame;
 			
 			fixed4 shot (sampler2D tex, float2 uv, float dx, float dy, int frame) {
@@ -72,10 +76,13 @@ Shader "Game/TextureAnimation"
 				// return shot(_MainTex, i.uv, dx, dy, current) * _Color;
 
 				int next = floor(fmod(frame + 1, frames));
-				return lerp(shot(_MainTex, i.uv, dx, dy, current), shot(_MainTex, i.uv, dx, dy, next), frame - current) * _Color;
+				fixed4 finalCol = lerp(shot(_MainTex, i.uv, dx, dy, current), shot(_MainTex, i.uv, dx, dy, next), frame - current) * _Color;
+				clip(finalCol.a - _Cutout);
+				return finalCol;
 			}
 
 			ENDCG
 		}
 	}
+	FallBack "Transparent/Cutout/VertexLit"
 }

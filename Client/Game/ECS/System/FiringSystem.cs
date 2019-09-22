@@ -48,28 +48,28 @@ namespace Game
                 buffer.SetComponent(entity, new Bullet
                 {
                     StartTime = fireStartTime,
-                    BoxSize = new float3(0.1f,0.1f,0.1f),
+                    BoxSize = new float3(0.1f * weapon.BulletScale.x,0.1f,0.1f),
                     Damage = weapon.Damage,
                     BlastDuration = weapon.BulletBlastDuration,
                     MoveDir = weapon.ShootDir
                 });
                 buffer.SetComponent(entity, new MoveSpeed
                 {
-                    Speed = weapon.BulletSpeed
+                    Speed = ECSWorld.Instance.BulletSpeed
                 });
                 buffer.SetComponent(entity, new NonUniformScale
                 {
                     Value = weapon.BulletScale
                 });
-                var pos = translation.Value;
+                var pos = translation.Value + weapon.ShootOffset;
                 buffer.SetComponent(entity, new Translation
                 {
-                    Value = new float3(pos.x + offsetX, pos.y, pos.z + weapon.ShootOffset),
+                    Value = new float3(pos.x + offsetX, pos.y, pos.z ),
                 });
                 buffer.SetSharedComponent(entity, new RenderMesh
                 {
-                    mesh = ECSWorld.Instance.meshBullet,
-                    material = ECSWorld.Instance.materialBullet,
+                    mesh = ECSWorld.Instance.meshBullets[weapon.SkinId],
+                    material = ECSWorld.Instance.materialBullets[weapon.SkinId],
                     castShadows = ShadowCastingMode.Off,
                     receiveShadows = false
                 });
