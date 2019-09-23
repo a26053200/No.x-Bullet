@@ -32,25 +32,22 @@ namespace Game
             [ReadOnly] public NativeArray<Entity> Entities;
             [ReadOnly] public EntityCommandBuffer EntityCommandBuffer;
 
-            public void Execute(Entity entity, int index, [ReadOnly] ref Enemy enemy,ref Airplane airplane, [ReadOnly] ref AABBCollider collider)
+            public void Execute(Entity entity, int index, ref Enemy enemy,ref Airplane airplane, [ReadOnly] ref AABBCollider collider)
             {
                 for (int i = index + 1; i < Colliders.Length; i++)
                 {
-                    var otherCollider = Colliders[i];
                     //击中
-                    if (ECSPhysics.Intersect(collider.MinMaxBox, otherCollider.MinMaxBox))
+                    if (ECSPhysics.Intersect(collider.MinMaxBox, Colliders[i].MinMaxBox) && Colliders[i].Box.Center.z < collider.Box.Center.z)
                     {
                         collider.CollideCount += 1;
                         airplane.Hp = math.max(0f,airplane.Hp - Bullets[i].Damage);
-                        EntityCommandBuffer.DestroyEntity(Entities[i]);
                         if (enemy.SpeedScale >= 1.0f)
                             enemy.SpeedScale *= 0.85f; //受到攻击后减速
-                        //碰撞相交的新的AABB盒子,其中心点就是爆炸点
-//                        var box = (AABB)ECSPhysics.GetEncompassingAABB(collider.MinMaxBox, otherCollider.MinMaxBox);
+                        EntityCommandBuffer.DestroyEntity(Entities[i]);
                         Entity e = EntityCommandBuffer.CreateEntity(ECSWorld.BlastEntityArchetype);
                         EntityCommandBuffer.SetComponent(e, new Blast
                         {
-                            Pos = otherCollider.Box.Center,
+                            Pos = Colliders[i].Box.Center,
                             Duration = Bullets[i].BlastDuration
                         });
                         break;

@@ -21,7 +21,6 @@ namespace Game
         [BurstCompile]
         private struct MoveForwardJob : IJobForEachWithEntity_ECCCC<Translation,MoveSpeed,Rotation,Bullet>
         {
-            public float CurrentTime;
             public float DeltaTime;
             [ReadOnly]public EntityCommandBuffer EntityCommandBuffer;
 
@@ -31,10 +30,6 @@ namespace Game
                 //var dir = math.forward(rotation.Value);
                 //dir = math.normalize(dir);
                 translation.Value.xyz += DeltaTime * moveSpeed.Speed * bullet.MoveDir;
-                if (CurrentTime - bullet.StartTime > 3f)
-                {
-                    EntityCommandBuffer.DestroyEntity(entity);
-                }
             }
         }
         
@@ -42,7 +37,6 @@ namespace Game
         {
             var job = new MoveForwardJob()
             {
-                CurrentTime = Time.time,
                 DeltaTime = Time.deltaTime,
                 EntityCommandBuffer = _barrier.CreateCommandBuffer(),
             };

@@ -64,7 +64,7 @@ namespace Game
                 var pos = translation.Value + weapon.ShootOffset;
                 buffer.SetComponent(entity, new Translation
                 {
-                    Value = new float3(pos.x + offsetX, pos.y, pos.z ),
+                    Value = new float3(pos.x + offsetX, pos.y + 0.1f, pos.z ),
                 });
                 buffer.SetSharedComponent(entity, new RenderMesh
                 {

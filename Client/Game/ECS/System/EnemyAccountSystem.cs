@@ -12,7 +12,7 @@ namespace Game
                 {
                     PostUpdateCommands.DestroyEntity(entity);
                     ECSWorld.Instance.score++;
-                    PostUpdateCommands.CreateEntity(ECSWorld.BlastEntityArchetype);
+                    //PostUpdateCommands.CreateEntity(ECSWorld.BlastEntityArchetype);
                 }
             });
         }

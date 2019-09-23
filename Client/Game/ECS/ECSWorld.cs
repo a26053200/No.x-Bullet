@@ -21,6 +21,8 @@ namespace Game
         [Range(1f, 60f)] public float ShootSpeed = 0;
         
         [Range(1f, 100f)] public float BulletSpeed = 0;
+        
+        [Range(0.1f, 5f)] public float BulletLifeTime = 3f;
         public bool isStart { get; private set; }
 
         public float Horizontal;
