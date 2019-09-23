@@ -82,7 +82,7 @@ function BattleMdr:CreateEnemyAirplane()
     airplaneInfo.ShootOffset = 0.7
     airplaneInfo.LifeTime = 4
     airplaneInfo.MaxHp = math.random(20, 100)
-    airplaneInfo.BoxSize = Vector3.New(1, 0.1, 1) * scale
+    airplaneInfo.BoxSize = Vector3.New(1.5, 0.1, 1) * scale
     airplaneInfo.Damage = 10
     airplaneInfo.ShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On
     airplaneInfo.ReceiveShadows = false
