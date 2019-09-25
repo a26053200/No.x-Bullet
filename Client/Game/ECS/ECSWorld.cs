@@ -18,11 +18,13 @@ namespace Game
         [HideInInspector]
         public int score;
 
-        [Range(1f, 60f)] public float ShootSpeed = 0;
+        [Range(1f, 20f)] public float MoveSpeed = 6f;
         
-        [Range(1f, 100f)] public float BulletSpeed = 0;
+        [Range(1f, 60f)] public float ShootSpeed = 22f;
         
-        [Range(0.1f, 5f)] public float BulletLifeTime = 3f;
+        [Range(1f, 100f)] public float BulletSpeed = 67f;
+        
+        [Range(0.1f, 5f)] public float BulletLifeTime = 0.8f;
         public bool isStart { get; private set; }
 
         public float Horizontal;

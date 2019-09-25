@@ -20,12 +20,13 @@ namespace Game
         {
             public Rect Rect;
             public float DeltaTime;
+            public float MoveSpeed;
             
             public void Execute(Entity entity, int index, [ReadOnly] ref Player player,[ReadOnly] ref Airplane airplane,ref Translation translation,
                 ref RotationEulerXYZ rotationEulerXyz,
                 ref MoveSpeed moveSpeed, ref PlayerInput input)
             {
-                var pos = CalPos(input, translation.Value, moveSpeed.Speed, airplane.PlayerSize);
+                var pos = CalPos(input, translation.Value, MoveSpeed, airplane.PlayerSize);
                 translation.Value = pos;
                 var radian = math.PI / 180f * 30f;
                 rotationEulerXyz.Value = new float3(0, 0, -radian * input.Horizontal);
@@ -58,7 +59,8 @@ namespace Game
                 var job = new PlayerMovementJob()
                 {
                     Rect = ECSWorld.Instance.cornerRect,
-                    DeltaTime = Time.deltaTime
+                    DeltaTime = Time.deltaTime,
+                    MoveSpeed = ECSWorld.Instance.MoveSpeed
                 };
                 return job.Schedule(this, inputDeps);
             }

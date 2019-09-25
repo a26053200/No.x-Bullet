@@ -48,7 +48,7 @@ namespace Game
                 buffer.SetComponent(entity, new Bullet
                 {
                     StartTime = fireStartTime,
-                    BoxSize = new float3(0.1f * weapon.BulletScale.x,0.1f,0.1f),
+                    BoxSize = weapon.BoxSize * weapon.BulletScale.x,
                     Damage = weapon.Damage,
                     BlastDuration = weapon.BulletBlastDuration,
                     MoveDir = weapon.ShootDir
@@ -68,7 +68,7 @@ namespace Game
                 });
                 buffer.SetSharedComponent(entity, new RenderMesh
                 {
-                    mesh = ECSWorld.Instance.meshBullets[weapon.SkinId],
+                    mesh = ECSWorld.Instance.meshBullets[0],
                     material = ECSWorld.Instance.materialBullets[weapon.SkinId],
                     castShadows = ShadowCastingMode.Off,
                     receiveShadows = false

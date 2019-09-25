@@ -572,18 +572,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  ShootSpeed: 10.4
-  BulletSpeed: 41.6
-  BulletLifeTime: 1.15
+  MoveSpeed: 6.8
+  ShootSpeed: 22
+  BulletSpeed: 67
+  BulletLifeTime: 0.8
   Horizontal: 0
   Vertical: 0
   ActiveWeaponNo: 0
   ActiveWeaponLevel: 0
   meshBullets:
-  - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
-  - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   materialBullets:
   - {fileID: 2100000, guid: f9812fc423250554d8753220278b1b27, type: 2}
