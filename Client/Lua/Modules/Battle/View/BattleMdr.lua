@@ -45,6 +45,7 @@ function BattleMdr:CreateHeroAirplane()
     )
     airplaneInfo.ShootIntervalTime = 10 * FRAME_TIME
     airplaneInfo.Size = size
+    airplaneInfo.MoveSpeed = self.ecsWorld.MoveSpeed
     airplaneInfo.Scale = Vector3.New(0.5, 0.5, 0.5)
     airplaneInfo.MaxHp = math.random(50, 100)
     airplaneInfo.BoxSize = Vector3.New(0.5, 0.1, 0.5)

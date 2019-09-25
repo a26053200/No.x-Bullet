@@ -93,12 +93,12 @@ function JoystickMdr:Update()
 
     if Input.GetKey(UnityEngine.KeyCode.F1) then
         ECSWorld.ActiveWeaponNo = 1
-        ECSWorld.ActiveWeaponLevel = 1
+        --ECSWorld.ActiveWeaponLevel = 1
     end
 
     if Input.GetKey(UnityEngine.KeyCode.F2) then
         ECSWorld.ActiveWeaponNo = 2
-        ECSWorld.ActiveWeaponLevel = 1
+        --ECSWorld.ActiveWeaponLevel = 1
     end
 
     if Input.GetKey(UnityEngine.KeyCode.Alpha1) then

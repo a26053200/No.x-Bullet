@@ -88,10 +88,11 @@ function WeaponNo1:CreateWeaponInfo()
     local weaponInfo = Game.WeaponInfo.New()
     weaponInfo.SkinId = 1
     weaponInfo.No = 1
-    weaponInfo.Damage = math.random(10, 30)
+    weaponInfo.Damage = 20
     weaponInfo.ShootOffset = Vector3.New(0, 0, 0.7)
     weaponInfo.BulletSpeed = self.ecsWorld.BulletSpeed
     weaponInfo.BulletScale = Vector3.New(0.3, 1, 1)
+    weaponInfo.BoxSize = Vector3.New(1, 1, 1)
     return weaponInfo
 end
 

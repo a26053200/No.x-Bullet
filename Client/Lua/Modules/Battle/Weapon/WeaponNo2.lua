@@ -47,13 +47,16 @@ end
 function WeaponNo2:CreateWeaponInfo()
     local weaponInfo = Game.WeaponInfo.New()
     weaponInfo.No = 2
-    weaponInfo.Damage = math.random(10, 30)
+    weaponInfo.Damage = 30
     weaponInfo.ShootOffset = Vector3.New(0, 0, 0.7)
     weaponInfo.BulletSpeed = self.ecsWorld.BulletSpeed
     weaponInfo.BulletEuler = Vector3.New(90, 180, 0)
     weaponInfo.ShootDir = Vector3.New(0, 0, 1)
+    weaponInfo.BoxSize = Vector3.New(0.4, 0.1, 0.3)
     weaponInfo.BulletGap = 0
+
     return weaponInfo
 end
+
 
 return WeaponNo2
