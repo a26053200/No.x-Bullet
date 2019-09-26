@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d268296124e6984692a713e72add158, type: 3}
+  m_Name: BMSettings
+  m_EditorClassIdentifier: 
+  AppName: XBullet
+  BuildOutoutDirName: AssetBundle
+  resDir: Assets/Res/
+  luaFolderList:
+  - Assets/Lua
+  - Assets/Framework/ToLua/Lua
+  luaBuildType: 4
+  luaCompressType: 1
+  luaPattern: '*.lua'
+  scenesFolderList:
+  - Assets/Res/Scenes
+  scenesBuildType: 1
+  scenesCompressType: 2
+  scenesPattern: '*.unity'
+  singleFolderList:
+  - Assets/Res/Textures
+  - Assets/Res/Prefabs
+  singleBuildType: 0
+  singleCompressType: 2
+  singlePattern: '*.*'
+  packFolderList:
+  - Assets/Res/Atlas
+  - Assets/Res/Sprites/Atlas
+  packBuildType: 2
+  packCompressType: 2
+  packPattern: '*.*'
+  shaderFolderList:
+  - Assets/Res/Shaders
+  shaderBuildType: 3
+  shaderCompressType: 1
+  shaderPattern: '*.*'
+  Suffix_Bundle: bundle
+  Scene_Suffix: '*.unity'
+  Ignore_Suffix: .meta,.DS_Store,.iml
+  Ignore_Folder: .svn,.idea
+  ownerDependenceSuffixs:
+  - .prefab
+  - .mat
+  - .controller
+  atlasSpriteFolderList: []
+  atlasSpritePrefabDir: Assets/Res/Prefabs/AtlasSprite/
