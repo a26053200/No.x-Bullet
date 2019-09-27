@@ -29,6 +29,7 @@ MonoBehaviour:
   singleFolderList:
   - Assets/Res/Textures
   - Assets/Res/Prefabs
+  - Assets/Res/Models
   singleBuildType: 0
   singleCompressType: 2
   singlePattern: '*.*'
@@ -51,5 +52,6 @@ MonoBehaviour:
   - .prefab
   - .mat
   - .controller
-  atlasSpriteFolderList: []
+  atlasSpriteFolderList:
+  - Assets/Res/Atlas
   atlasSpritePrefabDir: Assets/Res/Prefabs/AtlasSprite/
